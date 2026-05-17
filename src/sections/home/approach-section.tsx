@@ -4,10 +4,10 @@ import { TechnicalLine } from "@/components/visuals/technical-line";
 
 export function ApproachSection() {
   return (
-    <section className="section-pad border-y border-white/10 bg-white/[0.025]">
+    <section className="section-pad theme-band border-y border-border">
       <div className="container">
         <SectionHeader
-          eyebrow="Enfoque Eliot"
+          eyebrow="Enfoque Elliot"
           title="Del diagnostico a la continuidad operativa."
           body="Un modelo horizontal que conecta estrategia, diseno tecnico, implementacion y soporte."
           align="center"

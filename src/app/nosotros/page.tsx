@@ -27,7 +27,7 @@ export default function AboutPage() {
           <SectionHeader
             eyebrow="Nosotros"
             title="Una firma de ingenieria para empresas que necesitan claridad tecnica."
-            body="Eliot Electronics integra energia, ingenieria, sistemas, electronica, consultoria y helpdesk en una sola arquitectura de servicio."
+            body="Elliot Electronics integra energia, ingenieria, sistemas, electronica, consultoria y helpdesk en una sola arquitectura de servicio."
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {values.map((value) => (

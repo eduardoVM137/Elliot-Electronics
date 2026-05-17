@@ -8,7 +8,7 @@ import { projects } from "@/data/projects";
 
 export function CaseStudiesSection() {
   return (
-    <section className="section-pad bg-white/[0.025]">
+    <section className="section-pad theme-band">
       <div className="container">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeader

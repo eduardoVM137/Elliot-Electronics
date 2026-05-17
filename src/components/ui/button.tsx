@@ -13,7 +13,7 @@ const buttonVariants = cva(
           "bg-primary text-primary-foreground shadow-glow-sm hover:bg-eliot-cyan",
         secondary:
           "border border-white/10 bg-white/[0.06] text-white hover:border-white/20 hover:bg-white/[0.1]",
-        ghost: "text-foreground hover:bg-white/[0.06] hover:text-white",
+        ghost: "text-foreground hover:bg-white/[0.06] hover:text-foreground",
         outline:
           "border border-eliot-electric/40 bg-eliot-electric/10 text-eliot-cyan hover:bg-eliot-electric/16",
       },

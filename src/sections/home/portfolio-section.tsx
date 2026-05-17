@@ -17,7 +17,7 @@ export function PortfolioSection() {
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {solutions.map((solution) => (
             <Link key={solution.slug} href={solution.href} className="group">
-              <Card className="relative min-h-72 overflow-hidden transition-colors group-hover:border-eliot-electric/40">
+              <Card className="on-dark relative min-h-72 overflow-hidden transition-colors group-hover:border-eliot-electric/40">
                 <div
                   className="absolute inset-0 bg-cover bg-center opacity-35 transition-transform duration-700 group-hover:scale-105"
                   style={{

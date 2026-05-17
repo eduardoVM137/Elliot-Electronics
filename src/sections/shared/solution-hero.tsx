@@ -12,7 +12,7 @@ type SolutionHeroProps = {
 
 export function SolutionHero({ solution, secondaryCta = "Ver proyectos" }: SolutionHeroProps) {
   return (
-    <section className="relative min-h-[78svh] overflow-hidden pt-20">
+    <section className="hero-surface relative min-h-[78svh] overflow-hidden pt-20">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{

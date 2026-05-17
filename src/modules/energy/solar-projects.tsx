@@ -16,7 +16,7 @@ export function SolarProjects() {
             </p>
             <h2 className="mt-3 text-3xl font-semibold text-white">Energia en campo.</h2>
           </div>
-          <Link href="/proyectos" className="text-sm text-muted-foreground hover:text-white">
+          <Link href="/proyectos" className="text-sm text-muted-foreground hover:text-foreground">
             Ver todos
           </Link>
         </div>

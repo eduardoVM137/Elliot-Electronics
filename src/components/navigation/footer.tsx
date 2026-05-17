@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-[#04080d]">
+    <footer className="theme-footer border-t border-border">
       <div className="container grid gap-10 py-12 md:grid-cols-[1.3fr_2fr]">
         <div>
           <BrandMark />
@@ -24,31 +24,31 @@ export function Footer() {
 
         <div className="grid gap-8 sm:grid-cols-3">
           <div>
-            <h3 className="text-xs font-semibold uppercase text-white">Soluciones</h3>
+            <h3 className="text-xs font-semibold uppercase text-foreground">Soluciones</h3>
             <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
               {solutionNav.map((item) => (
-                <Link key={item.href} href={item.href} className="hover:text-white">
+                <Link key={item.href} href={item.href} className="hover:text-foreground">
                   {item.label}
                 </Link>
               ))}
             </div>
           </div>
           <div>
-            <h3 className="text-xs font-semibold uppercase text-white">Empresa</h3>
+            <h3 className="text-xs font-semibold uppercase text-foreground">Empresa</h3>
             <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
-              <Link href="/nosotros" className="hover:text-white">
+              <Link href="/nosotros" className="hover:text-foreground">
                 Nosotros
               </Link>
-              <Link href="/proyectos" className="hover:text-white">
+              <Link href="/proyectos" className="hover:text-foreground">
                 Proyectos
               </Link>
-              <Link href="/contacto" className="hover:text-white">
+              <Link href="/contacto" className="hover:text-foreground">
                 Contacto
               </Link>
             </div>
           </div>
           <div>
-            <h3 className="text-xs font-semibold uppercase text-white">Contacto</h3>
+            <h3 className="text-xs font-semibold uppercase text-foreground">Contacto</h3>
             <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
                 <Mail className="h-4 w-4" />
@@ -66,8 +66,8 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="container flex flex-col gap-3 border-t border-white/10 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>© 2026 Eliot Electronics. Todos los derechos reservados.</p>
+      <div className="container flex flex-col gap-3 border-t border-border py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 Elliot Electronics. Todos los derechos reservados.</p>
         <div className="flex gap-5">
           <span>Aviso de privacidad</span>
           <span>Terminos y condiciones</span>

@@ -4,8 +4,8 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Eliot Electronics",
-    short_name: "Eliot",
+    name: "Elliot Electronics",
+    short_name: "Elliot",
     description:
       "Firma de ingenieria para energia, sistemas, electronica, consultoria y soporte tecnico.",
     start_url: "/",

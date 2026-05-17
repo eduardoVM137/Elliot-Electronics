@@ -24,7 +24,7 @@ export function ImagePanel({
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-lg border border-white/10 bg-eliot-night shadow-panel",
+        "image-surface group relative overflow-hidden rounded-lg border border-white/10 bg-eliot-night shadow-panel",
         aspectClass[aspect],
         className,
       )}

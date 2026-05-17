@@ -9,7 +9,7 @@ export default function NotFound() {
         <p className="text-sm font-medium uppercase text-eliot-cyan">404</p>
         <h1 className="mt-4 text-4xl font-semibold text-white">Pagina no encontrada</h1>
         <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
-          La ruta no existe dentro de la arquitectura inicial de Eliot Electronics.
+          La ruta no existe dentro de la arquitectura inicial de Elliot Electronics.
         </p>
         <Button asChild className="mt-8">
           <Link href="/">Volver al inicio</Link>

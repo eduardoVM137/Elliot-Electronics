@@ -1,4 +1,4 @@
-# Eliot Electronics
+# Elliot Electronics
 
 Sitio corporativo premium para una firma de ingenieria con carteras de energia, ingenieria, sistemas, electronica, consultoria y helpdesk.
 

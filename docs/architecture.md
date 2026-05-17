@@ -1,8 +1,8 @@
-# Eliot Electronics Web Architecture
+# Elliot Electronics Web Architecture
 
 ## Vision
 
-Eliot Electronics is structured as a premium B2B engineering website, not a simple solar landing page. The information architecture treats every business portfolio as a different product experience while sharing a single visual system, navigation model and content/data layer.
+Elliot Electronics is structured as a premium B2B engineering website, not a simple solar landing page. The information architecture treats every business portfolio as a different product experience while sharing a single visual system, navigation model and content/data layer.
 
 ## Stack
 
@@ -77,7 +77,7 @@ Home
 [ Problem ]
   4 cards: cost, efficiency, integration, reactive operation
 
-[ Eliot Approach ]
+[ Elliot Approach ]
   Consulting -> Engineering -> Implementation -> Helpdesk
   animated line
 
