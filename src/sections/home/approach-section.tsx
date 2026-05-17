@@ -8,8 +8,8 @@ export function ApproachSection() {
       <div className="container">
         <SectionHeader
           eyebrow="Nuestro proceso"
-          title="De tu recibo electrico a una solucion funcionando."
-          body="Un flujo simple para que puedas decidir con confianza: diagnostico, propuesta, instalacion y soporte."
+          title="Del reto tecnico a una operacion medible."
+          body="Levantamos necesidades, disenamos la solucion, implementamos con ingenieria y dejamos soporte para continuidad."
           align="center"
         />
         <div className="mt-14">

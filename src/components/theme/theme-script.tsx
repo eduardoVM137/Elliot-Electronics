@@ -1,7 +1,7 @@
 const themeScript = `
 (function() {
   try {
-    var stored = localStorage.getItem('elliot-theme-v2');
+    var stored = localStorage.getItem('elliot-theme-v3');
     var theme = stored || 'light';
     var root = document.documentElement;
     root.classList.remove('light', 'dark');

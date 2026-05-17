@@ -5,23 +5,23 @@ import { SectionHeader } from "@/components/visuals/section-header";
 
 const benefits = [
   {
-    title: "Ahorro con numeros claros",
-    body: "Analizamos tu recibo, demanda y operacion para estimar ahorro, retorno e inversion antes de instalar.",
-    icon: LineChart,
-  },
-  {
-    title: "Ingenieria a la medida",
-    body: "Dimensionamos sistemas solares, tableros, automatizacion y monitoreo segun tu consumo real.",
+    title: "Ingenieria y electronica industrial",
+    body: "Tableros, automatizacion, instrumentacion y control para procesos que no pueden detenerse.",
     icon: ClipboardCheck,
   },
   {
-    title: "Implementacion integral",
-    body: "Un solo equipo coordina diseno, suministro, instalacion, pruebas y entrega tecnica.",
+    title: "Energia solar con retorno medible",
+    body: "Dimensionamos sistemas fotovoltaicos segun consumo, demanda, espacio disponible e inversion.",
+    icon: LineChart,
+  },
+  {
+    title: "Solucion integral llave en mano",
+    body: "Diagnostico, diseno, instalacion, pruebas, documentacion y capacitacion en una misma ruta.",
     icon: BadgeCheck,
   },
   {
-    title: "Soporte posterior",
-    body: "Monitoreo, mantenimiento y mesa de ayuda para que la solucion siga produciendo valor.",
+    title: "Helpdesk y mantenimiento",
+    body: "Mesa de ayuda, monitoreo y soporte tecnico para que la solucion siga produciendo valor.",
     icon: Headphones,
   },
 ];
@@ -32,7 +32,7 @@ export function ProblemSection() {
       <div className="container">
         <SectionHeader
           eyebrow="Por que elegir Elliot"
-          title="No vendemos paneles: disenamos soluciones que bajan costos y sostienen tu operacion."
+          title="No vendemos equipos aislados: disenamos infraestructura tecnica para operar mejor."
           body="El cliente recibe una propuesta tecnica y financiera entendible, con acompanamiento desde el diagnostico hasta el mantenimiento."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

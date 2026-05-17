@@ -14,7 +14,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#21a7ff",
     icons: [
       {
-        src: "/brand/elliot-icon.png",
+        src: "/brand/elliot-mark.png",
         sizes: "any",
         type: "image/png",
       },

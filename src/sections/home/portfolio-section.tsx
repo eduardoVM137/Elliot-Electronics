@@ -5,7 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { SectionHeader } from "@/components/visuals/section-header";
 import { solutions } from "@/data/solutions";
 
-const homeOrder = ["energia", "ingenieria", "consultoria", "sistemas", "electronica", "helpdesk"];
+const homeOrder = ["ingenieria", "electronica", "energia", "consultoria", "helpdesk", "sistemas"];
 
 export function PortfolioSection() {
   const orderedSolutions = homeOrder
@@ -16,9 +16,9 @@ export function PortfolioSection() {
     <section className="section-pad">
       <div className="container">
         <SectionHeader
-          eyebrow="Servicios especializados"
-          title="Energia solar, ingenieria y tecnologia para empresas."
-          body="Puedes iniciar con paneles solares, una auditoria energetica o un proyecto de automatizacion. Nosotros conectamos las piezas para que funcionen como una sola solucion."
+          eyebrow="Soluciones"
+          title="Capacidades para disenar, instalar y sostener tu operacion."
+          body="Ingenieria, electronica y energia solar como frente principal; consultoria para decidir con claridad, helpdesk para continuidad y sistemas cuando la operacion necesita datos."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {orderedSolutions.map((solution) => solution && (

@@ -66,10 +66,10 @@ export const solutions: Solution[] = [
   },
   {
     slug: "energia",
-    index: "02",
+    index: "03",
     href: "/soluciones/energia",
     eyebrow: "Energia / paneles",
-    title: "Energia limpia, ahorro garantizado",
+    title: "Energia solar con retorno medible",
     summary:
       "Sistemas solares empresariales que reducen costos y convierten la energia en una ventaja financiera.",
     image:
@@ -89,7 +89,7 @@ export const solutions: Solution[] = [
   },
   {
     slug: "sistemas",
-    index: "03",
+    index: "06",
     href: "/soluciones/sistemas",
     eyebrow: "Sistemas",
     title: "Sistemas inteligentes para decisiones mas precisas",
@@ -112,7 +112,7 @@ export const solutions: Solution[] = [
   },
   {
     slug: "electronica",
-    index: "04",
+    index: "02",
     href: "/soluciones/electronica",
     eyebrow: "Electronica",
     title: "Soluciones electronicas que conectan y hacen posible",
@@ -135,7 +135,7 @@ export const solutions: Solution[] = [
   },
   {
     slug: "consultoria",
-    index: "05",
+    index: "04",
     href: "/soluciones/consultoria",
     eyebrow: "Consultoria",
     title: "Consultoria estrategica para decisiones que generan valor",
@@ -158,7 +158,7 @@ export const solutions: Solution[] = [
   },
   {
     slug: "helpdesk",
-    index: "06",
+    index: "05",
     href: "/soluciones/helpdesk",
     eyebrow: "Helpdesk",
     title: "Soporte tecnico continuo para operaciones siempre activas",

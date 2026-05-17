@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 type Theme = "light" | "dark";
 
 function getCurrentTheme(): Theme {
-  if (typeof document === "undefined") return "dark";
+  if (typeof document === "undefined") return "light";
 
-  return document.documentElement.classList.contains("light") ? "light" : "dark";
+  return document.documentElement.classList.contains("dark") ? "dark" : "light";
 }
 
 function setTheme(theme: Theme) {
@@ -18,7 +18,7 @@ function setTheme(theme: Theme) {
   root.classList.remove("light", "dark");
   root.classList.add(theme);
   root.style.colorScheme = theme;
-  localStorage.setItem("elliot-theme-v2", theme);
+  localStorage.setItem("elliot-theme-v3", theme);
 }
 
 export function ThemeToggle({ className }: { className?: string }) {

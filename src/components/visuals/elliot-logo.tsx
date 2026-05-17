@@ -14,10 +14,11 @@ export function ElliotLogo({
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <img
-        src="/brand/elliot-icon.png"
+        src="/brand/elliot-mark.png"
         alt=""
         aria-hidden="true"
-        className={cn("h-10 w-14 shrink-0 object-contain", markClassName)}
+        draggable={false}
+        className={cn("h-11 w-[68px] shrink-0 object-contain", markClassName)}
       />
 
       {showText && (
