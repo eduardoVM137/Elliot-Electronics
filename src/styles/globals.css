@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 211 55% 3%;
+    --foreground: 206 55% 96%;
+    --card: 211 46% 7%;
+    --card-foreground: 206 55% 96%;
+    --popover: 211 46% 7%;
+    --popover-foreground: 206 55% 96%;
+    --primary: 203 100% 56%;
+    --primary-foreground: 209 70% 6%;
+    --secondary: 206 32% 14%;
+    --secondary-foreground: 206 55% 96%;
+    --muted: 207 30% 13%;
+    --muted-foreground: 204 19% 66%;
+    --accent: 188 100% 71%;
+    --accent-foreground: 209 70% 6%;
+    --destructive: 2 78% 58%;
+    --destructive-foreground: 206 55% 96%;
+    --border: 204 32% 18%;
+    --input: 204 32% 18%;
+    --ring: 196 100% 71%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth bg-eliot-ink text-foreground antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      linear-gradient(180deg, rgba(5, 10, 17, 0.84), #050a11 46%, #04070d 100%),
+      radial-gradient(circle at 50% 0%, rgba(33, 167, 255, 0.14), transparent 31%),
+      #050a11;
+  }
+
+  ::selection {
+    @apply bg-eliot-electric text-eliot-ink;
+  }
+}
+
+@layer components {
+  .site-shell {
+    @apply min-h-screen overflow-x-hidden bg-eliot-ink text-foreground;
+  }
+
+  .section-pad {
+    @apply py-20 md:py-28;
+  }
+
+  .premium-panel {
+    @apply border border-white/10 bg-white/[0.045] shadow-panel backdrop-blur-xl;
+  }
+
+  .hairline {
+    @apply border-white/10;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .technical-surface {
+    background-image:
+      linear-gradient(rgba(107, 233, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(107, 233, 255, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .edge-fade {
+    mask-image: linear-gradient(to bottom, transparent, black 14%, black 86%, transparent);
+  }
+}
