@@ -3,7 +3,7 @@
 import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,11 @@ export function Navbar() {
     detail: solutions.find((solution) => solution.href === item.href),
   }));
 
+  useEffect(() => {
+    setSolutionsOpen(false);
+    setOpen(false);
+  }, [pathname]);
+
   return (
     <header
       className="fixed inset-x-0 top-0 z-50 border-b border-border backdrop-blur-2xl"
@@ -36,12 +41,7 @@ export function Navbar() {
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground lg:flex">
           {mainNav.map((item) =>
             item.label === "Soluciones" ? (
-              <div
-                key={item.href}
-                className="relative"
-                onMouseEnter={() => setSolutionsOpen(true)}
-                onMouseLeave={() => setSolutionsOpen(false)}
-              >
+              <div key={item.href} className="relative">
                 <button
                   type="button"
                   onClick={() => setSolutionsOpen((value) => !value)}
@@ -55,11 +55,12 @@ export function Navbar() {
 
                 {solutionsOpen && (
                   <div className="absolute left-1/2 top-full z-50 w-[720px] -translate-x-1/2 pt-6">
-                    <div className="premium-panel grid grid-cols-2 gap-2 rounded-lg p-3">
+                    <div className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-background/95 p-3 shadow-panel backdrop-blur-2xl">
                       {solutionItems.map(({ detail, href, label }) => (
                         <Link
                           key={href}
                           href={href}
+                          onClick={() => setSolutionsOpen(false)}
                           className="group rounded-md border border-transparent p-4 transition-colors hover:border-primary/20 hover:bg-primary/5"
                         >
                           <div className="flex items-start gap-3">

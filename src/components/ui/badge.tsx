@@ -9,7 +9,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-eliot-electric/30 bg-eliot-electric/10 text-eliot-cyan",
+          "border-eliot-electric/45 bg-eliot-electric/[0.12] text-[#075eb5] shadow-glow-sm dark:text-eliot-cyan",
         muted: "border-white/10 bg-white/[0.05] text-muted-foreground",
         success: "border-eliot-success/30 bg-eliot-success/10 text-eliot-success",
       },
