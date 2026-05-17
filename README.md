@@ -41,14 +41,16 @@ Este comando ejecuta:
 Copia `.env.example` a `.env.local` cuando ya tengas dominio:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://eliotelectronics.mx
+NEXT_PUBLIC_SITE_URL=https://eliot-electronics.com
 ```
 
 Tambien configura la misma variable en el proveedor de hosting para que `sitemap.xml`, `robots.txt`, canonical y Open Graph usen el dominio correcto.
 
 ## Deploy recomendado
 
-Vercel es la ruta mas directa para este proyecto porque detecta Next.js, ejecuta el build y permite conectar dominio/SSL desde el dashboard.
+Vercel es la ruta recomendada para este proyecto porque esta construido con Next.js y permite previews, SSL, dominios personalizados y despliegues automaticos con muy poca configuracion.
+
+Mantendremos `eliot-electronics.com` en Cloudflare como registrar/DNS, pero el hosting sera Vercel.
 
 Build command:
 
@@ -56,10 +58,10 @@ Build command:
 npm run build
 ```
 
-Output:
+Variable de entorno en Vercel:
 
-```txt
-out
+```bash
+NEXT_PUBLIC_SITE_URL=https://eliot-electronics.com
 ```
 
 El proyecto usa `output: "export"` en `next.config.ts`, asi que el build genera un sitio estatico.

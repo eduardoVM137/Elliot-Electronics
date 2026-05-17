@@ -2,52 +2,61 @@
 
 ## 1. Antes de comprar dominio
 
-Define el dominio principal. Opciones naturales:
+Dominio principal actual:
 
-- `eliotelectronics.mx`
-- `eliotelectronics.com.mx`
-- `eliotelectronics.com`
 - `eliot-electronics.com`
 
-Recomendacion de marca: si esta disponible, compra el dominio principal y una variante defensiva para evitar confusiones. Por ejemplo: `.mx` para Mexico y `.com` si existe.
+Variantes defensivas a considerar despues:
+
+- `eliotelectronics.com`
+- `eliotelectronics.mx`
+- `eliot-electronics.mx`
+- `eliot-electronics.com.mx`
+
+Recomendacion de marca: mantener `eliot-electronics.com` como canonical por ahora y comprar variantes defensivas cuando el presupuesto lo permita.
 
 ## 2. Donde comprar
 
-Rutas razonables:
+El dominio ya esta en Cloudflare. Mantener DNS y dominio ahi es una buena decision para este proyecto.
 
-- Cloudflare Registrar: buena opcion si quieres DNS rapido, DNSSEC y renovaciones sin sobreprecio de registrar.
-- Vercel Domains: camino simple si quieres comprar y desplegar todo en el mismo lugar.
-- Namecheap, GoDaddy u otro registrar: tambien funciona, pero revisa precio de renovacion, privacidad WHOIS y facilidad de DNS.
-
-## 3. Deploy en Vercel
+## 3. Deploy recomendado en Vercel
 
 1. Sube el proyecto a GitHub.
-2. En Vercel, crea un nuevo proyecto desde el repositorio.
-3. Framework: Next.js.
-4. Build command: `npm run build`.
-5. Configura `NEXT_PUBLIC_SITE_URL` con el dominio final.
-6. Despliega.
-7. Abre el dominio temporal de Vercel y revisa home, soluciones, proyectos y contacto.
+2. En Vercel, selecciona Add New Project.
+3. Importa el repositorio de GitHub.
+4. Framework preset: Next.js.
+5. Build command: `npm run build`.
+6. Configura la variable:
+   - `NEXT_PUBLIC_SITE_URL=https://eliot-electronics.com`
+7. Despliega.
+8. Revisa el subdominio temporal `*.vercel.app`.
 
-## 4. DNS
+## 4. Dominio con Vercel + Cloudflare DNS
 
-Cuando agregues el dominio en Vercel, Vercel te indicara los registros exactos.
+Despues de que Vercel despliegue correctamente:
+
+1. Entra al proyecto de Vercel.
+2. Ve a Settings > Domains.
+3. Agrega `eliot-electronics.com`.
+4. Agrega `www.eliot-electronics.com`.
+5. Vercel te dira que registros DNS necesita.
+6. En Cloudflare, ve a DNS > Records.
+7. Agrega los registros que Vercel indique.
+8. Importante: deja esos registros en modo DNS only, no proxied.
+9. Configura una redireccion para que `www` apunte al dominio principal.
 
 Configuracion tipica:
 
-- Dominio apex, por ejemplo `eliotelectronics.mx`: registro `A`.
-- Subdominio `www.eliotelectronics.mx`: registro `CNAME`.
+- `@` como registro `A` hacia `76.76.21.21`.
+- `www` como `CNAME` hacia el valor que Vercel indique.
 
-No mezcles dos metodos a la vez. Elige:
-
-- Gestionar DNS en Vercel con nameservers de Vercel.
-- Gestionar DNS en Cloudflare u otro proveedor y agregar ahi los registros que Vercel indique.
+Usa siempre el valor exacto del dashboard de Vercel si difiere.
 
 ## 5. Canonical
 
 Elige una version principal:
 
-- Recomendado: `https://eliotelectronics.mx`
+- Recomendado: `https://eliot-electronics.com`
 - Redireccionar `www` hacia apex, o apex hacia `www`, pero no dejar ambos como versiones independientes.
 
 ## 6. Despues de publicar

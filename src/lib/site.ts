@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "ELIOT ELECTRONICS",
   shortName: "Eliot",
-  defaultUrl: "https://eliotelectronics.mx",
+  defaultUrl: "https://eliot-electronics.com",
   description:
     "Firma de ingenieria para energia, automatizacion, sistemas, electronica, consultoria y soporte tecnico industrial.",
   location: "Guadalajara, Jalisco, Mexico",
