@@ -7,9 +7,9 @@ export function ApproachSection() {
     <section className="section-pad theme-band border-y border-border">
       <div className="container">
         <SectionHeader
-          eyebrow="Enfoque Elliot"
-          title="Del diagnostico a la continuidad operativa."
-          body="Un modelo horizontal que conecta estrategia, diseno tecnico, implementacion y soporte."
+          eyebrow="Nuestro proceso"
+          title="De tu recibo electrico a una solucion funcionando."
+          body="Un flujo simple para que puedas decidir con confianza: diagnostico, propuesta, instalacion y soporte."
           align="center"
         />
         <div className="mt-14">
@@ -20,7 +20,7 @@ export function ApproachSection() {
                 <div className="absolute -top-[2.45rem] left-0 flex h-9 w-9 items-center justify-center rounded-full border border-eliot-cyan/40 bg-eliot-ink text-xs text-eliot-cyan">
                   {step.id}
                 </div>
-                <h3 className="text-lg font-semibold uppercase text-white">{step.title}</h3>
+                <h3 className="text-lg font-semibold uppercase text-foreground">{step.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">{step.body}</p>
               </div>
             ))}

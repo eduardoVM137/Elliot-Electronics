@@ -5,23 +5,29 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { SectionHeader } from "@/components/visuals/section-header";
 import { solutions } from "@/data/solutions";
 
+const homeOrder = ["energia", "ingenieria", "consultoria", "sistemas", "electronica", "helpdesk"];
+
 export function PortfolioSection() {
+  const orderedSolutions = homeOrder
+    .map((slug) => solutions.find((solution) => solution.slug === slug))
+    .filter(Boolean);
+
   return (
     <section className="section-pad">
       <div className="container">
         <SectionHeader
-          eyebrow="Carteras de negocio"
-          title="Seis productos, una misma arquitectura de valor."
-          body="Cada linea esta disenada con una experiencia propia, pero comparte el mismo sistema visual, los mismos datos y la misma navegacion."
+          eyebrow="Servicios especializados"
+          title="Energia solar, ingenieria y tecnologia para empresas."
+          body="Puedes iniciar con paneles solares, una auditoria energetica o un proyecto de automatizacion. Nosotros conectamos las piezas para que funcionen como una sola solucion."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {solutions.map((solution) => (
+          {orderedSolutions.map((solution) => solution && (
             <Link key={solution.slug} href={solution.href} className="group">
               <Card className="on-dark relative min-h-72 overflow-hidden transition-colors group-hover:border-eliot-electric/40">
                 <div
-                  className="absolute inset-0 bg-cover bg-center opacity-35 transition-transform duration-700 group-hover:scale-105"
+                  className="absolute inset-0 bg-cover bg-center opacity-55 transition-transform duration-700 group-hover:scale-105"
                   style={{
-                    backgroundImage: `linear-gradient(180deg, rgba(5,10,17,0.15), rgba(5,10,17,0.9)), url(${solution.image})`,
+                    backgroundImage: `linear-gradient(180deg, rgba(5,10,17,0.08), rgba(5,10,17,0.92)), url(${solution.image})`,
                   }}
                 />
                 <CardHeader className="relative">
@@ -34,7 +40,7 @@ export function PortfolioSection() {
                   <CardTitle className="text-2xl">{solution.eyebrow}</CardTitle>
                   <CardDescription>{solution.summary}</CardDescription>
                   <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white">
-                    Explorar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    Ver solucion <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardHeader>
               </Card>

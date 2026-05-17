@@ -9,22 +9,22 @@ export const companyMetrics = [
 export const approachSteps = [
   {
     id: "01",
-    title: "Consultoria",
-    body: "Entendemos el negocio, los datos y los puntos de friccion.",
+    title: "Diagnostico",
+    body: "Revisamos consumo, objetivos, sitio y necesidades tecnicas.",
   },
   {
     id: "02",
-    title: "Ingenieria",
-    body: "Disenamos la solucion tecnica, economica y operativa.",
+    title: "Propuesta",
+    body: "Entregamos alcance, ahorro estimado, inversion y plan de trabajo.",
   },
   {
     id: "03",
     title: "Implementacion",
-    body: "Integramos hardware, software, energia y procesos.",
+    body: "Instalamos, integramos, probamos y dejamos documentacion tecnica.",
   },
   {
     id: "04",
-    title: "Helpdesk",
-    body: "Acompanamos la continuidad con soporte, SLA y mejora continua.",
+    title: "Monitoreo",
+    body: "Damos seguimiento, mantenimiento y soporte para proteger el retorno.",
   },
 ];

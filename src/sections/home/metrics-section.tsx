@@ -7,8 +7,8 @@ export function MetricsSection() {
     <section className="section-pad">
       <div className="container">
         <SectionHeader
-          eyebrow="Metricas"
-          title="Capacidad probada para ambientes exigentes."
+          eyebrow="Confianza operativa"
+          title="Experiencia para proyectos donde el ahorro y la continuidad importan."
           align="center"
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
