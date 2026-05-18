@@ -78,13 +78,13 @@ export function HomeHero() {
 ELIOT ELECTRONICS | INGENIERÍA, ENERGÍA Y TECNOLOGÍA
           </motion.p>
 
-          <motion.h1
+          <motion.h2
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.08 }}
             className="mx-auto mt-6 max-w-5xl text-balance font-display text-4xl font-black leading-[1.03] tracking-normal text-white md:text-6xl xl:text-[5.1rem]"
           >
-      Ingeniería, energía y tecnología para operaciones que no pueden detenerse.          </motion.h1>
+      Ingeniería, energía y tecnología para operaciones que no pueden detenerse.          </motion.h2>
 
           <motion.p
             initial={{ opacity: 0, y: 22 }}

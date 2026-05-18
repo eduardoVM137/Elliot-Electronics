@@ -17,7 +17,6 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
-  const isHome = pathname === "/";
 
   const solutionItems = solutionNav.map((item) => ({
     ...item,
@@ -34,28 +33,20 @@ export function Navbar() {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-[100] overflow-visible border-b backdrop-blur-2xl transition-colors",
-        isHome
-          ? "on-dark border-white/10 bg-eliot-ink/[0.72] text-white"
-          : "border-border bg-background/[0.92] text-foreground",
+        "border-border bg-background/90 text-foreground",
+        "dark:on-dark dark:border-white/10 dark:bg-eliot-ink/[0.72] dark:text-white",
       )}
     >
-      {isHome ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
-          <span className="block h-px w-1/3 animate-line-flow bg-gradient-to-r from-transparent via-eliot-cyan/80 to-transparent" />
-        </div>
-      ) : null}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
+        <span className="block h-px w-1/3 animate-line-flow bg-gradient-to-r from-transparent via-eliot-cyan/80 to-transparent" />
+      </div>
 
       <div className="container relative flex h-20 items-center justify-between">
         <Link href="/" aria-label="Eliot Electronics inicio">
-          <BrandMark tone={isHome ? "inverse" : "default"} />
+          <BrandMark />
         </Link>
 
-        <nav
-          className={cn(
-            "hidden items-center gap-7 text-sm lg:flex",
-            isHome ? "text-white/[0.78]" : "text-muted-foreground",
-          )}
-        >
+        <nav className="hidden items-center gap-7 text-sm text-muted-foreground lg:flex dark:text-white/[0.78]">
           {mainNav.map((item) =>
             item.label === "Soluciones" ? (
               <div key={item.href} className="relative">
@@ -64,10 +55,9 @@ export function Navbar() {
                   onClick={() => setSolutionsOpen((value) => !value)}
                   aria-expanded={solutionsOpen}
                   className={cn(
-                    "inline-flex items-center gap-1 transition-colors",
-                    isHome ? "hover:text-white" : "hover:text-foreground",
+                    "inline-flex items-center gap-1 transition-colors hover:text-foreground dark:hover:text-white",
                     pathname.startsWith("/soluciones") &&
-                      (isHome ? "text-white" : "text-foreground"),
+                      "text-foreground dark:text-white",
                   )}
                 >
                   Soluciones <ChevronDown className="h-3.5 w-3.5" />
@@ -110,10 +100,8 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "transition-colors",
-                  isHome ? "hover:text-white" : "hover:text-foreground",
-                  pathname === item.href &&
-                    (isHome ? "text-white" : "text-foreground"),
+                  "transition-colors hover:text-foreground dark:hover:text-white",
+                  pathname === item.href && "text-foreground dark:text-white",
                 )}
               >
                 {item.label}
@@ -123,30 +111,20 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <ThemeToggle
-            className={cn(
-              isHome &&
-                "border-white/20 bg-white/[0.12] text-white hover:text-white",
-            )}
-          />
+          <ThemeToggle className="dark:border-white/20 dark:bg-white/[0.12] dark:text-white dark:hover:text-white" />
 
           <Button
             asChild
             variant="secondary"
             size="sm"
-            className={cn(isHome && "border-white/20 bg-white/[0.14] text-white")}
+            className="dark:border-white/20 dark:bg-white/[0.14] dark:text-white"
           >
             <Link href="/contacto">Hablemos de tu proyecto</Link>
           </Button>
         </div>
 
         <button
-          className={cn(
-            "inline-flex h-10 w-10 items-center justify-center rounded-md border lg:hidden",
-            isHome
-              ? "border-white/20 bg-white/10 text-white"
-              : "border-border bg-card",
-          )}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-card text-foreground lg:hidden dark:border-white/20 dark:bg-white/10 dark:text-white"
           onClick={() => setOpen((value) => !value)}
           aria-label="Abrir navegación"
         >
