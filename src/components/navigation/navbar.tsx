@@ -32,12 +32,18 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-2xl transition-colors",
+        "fixed inset-x-0 top-0 z-50 overflow-hidden border-b backdrop-blur-2xl transition-colors",
         isHome
           ? "on-dark border-white/10 bg-eliot-ink/[0.18] text-white"
           : "border-border bg-background/[0.82] text-foreground",
       )}
     >
+      {isHome ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
+          <span className="block h-px w-1/3 animate-line-flow bg-gradient-to-r from-transparent via-eliot-cyan/80 to-transparent" />
+        </div>
+      ) : null}
+
       <div className="container flex h-20 items-center justify-between">
         <Link href="/" aria-label="Elliot Electronics inicio">
           <BrandMark tone={isHome ? "inverse" : "default"} />
