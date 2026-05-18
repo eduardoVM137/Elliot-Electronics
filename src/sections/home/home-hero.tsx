@@ -9,12 +9,7 @@ import { Button } from "@/components/ui/button";
 const heroImage =
   "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1800&q=90";
 
-const storySteps = [
-  "Diagnostico",
-  "Ingenieria",
-  "Implementacion",
-  "Soporte",
-];
+ 
 
 export function HomeHero() {
   return (
@@ -81,16 +76,7 @@ export function HomeHero() {
           transition={{ duration: 0.8, delay: 0.34 }}
           className="mx-auto mt-16 grid w-full max-w-5xl grid-cols-2 gap-x-5 gap-y-7 text-left md:grid-cols-4"
         >
-          {storySteps.map((step, index) => (
-            <div key={step} className="border-t border-white/[0.32] pt-4">
-              <p className="text-xs font-semibold text-eliot-cyan">
-                0{index + 1}
-              </p>
-              <p className="mt-2 text-sm font-semibold text-white md:text-base">
-                {step}
-              </p>
-            </div>
-          ))}
+          
         </motion.div>
       </div>
     </section>
