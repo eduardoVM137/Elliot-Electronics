@@ -1,0 +1,18 @@
+# Copia este archivo como wrangler.toml antes de desplegar el Worker.
+name = "elliot-contact-worker"
+main = "worker/src/index.ts"
+compatibility_date = "2026-05-18"
+
+# Opcion A: usar una ruta en el mismo dominio del sitio.
+# Requiere que el registro DNS este proxied en Cloudflare.
+routes = [
+  { pattern = "elliot-electronics.com/api/contact", zone_name = "elliot-electronics.com" }
+]
+
+[vars]
+TO_EMAIL = "contacto@elliot-electronics.com"
+FROM_EMAIL = "contacto@elliot-electronics.com"
+ALLOWED_ORIGIN = "https://elliot-electronics.com"
+
+# El secreto no va en wrangler.toml. Configuralo con:
+# npx wrangler secret put RESEND_API_KEY

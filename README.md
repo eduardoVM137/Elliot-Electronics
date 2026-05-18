@@ -41,7 +41,8 @@ Este comando ejecuta:
 Copia `.env.example` a `.env.local` cuando ya tengas dominio:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://eliot-electronics.com
+NEXT_PUBLIC_SITE_URL=https://elliot-electronics.com
+NEXT_PUBLIC_CONTACT_ENDPOINT=/api/contact
 ```
 
 Tambien configura la misma variable en el proveedor de hosting para que `sitemap.xml`, `robots.txt`, canonical y Open Graph usen el dominio correcto.
@@ -50,7 +51,7 @@ Tambien configura la misma variable en el proveedor de hosting para que `sitemap
 
 Vercel es la ruta recomendada para este proyecto porque esta construido con Next.js y permite previews, SSL, dominios personalizados y despliegues automaticos con muy poca configuracion.
 
-Mantendremos `eliot-electronics.com` en Cloudflare como registrar/DNS, pero el hosting sera Vercel.
+Mantendremos `elliot-electronics.com` en Cloudflare como registrar/DNS, pero el hosting sera Vercel.
 
 Build command:
 
@@ -61,10 +62,31 @@ npm run build
 Variable de entorno en Vercel:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://eliot-electronics.com
+NEXT_PUBLIC_SITE_URL=https://elliot-electronics.com
+NEXT_PUBLIC_CONTACT_ENDPOINT=/api/contact
 ```
 
 El proyecto usa `output: "export"` en `next.config.ts`, asi que el build genera un sitio estatico.
+
+## Formulario de contacto
+
+El formulario envia los datos al endpoint definido en `NEXT_PUBLIC_CONTACT_ENDPOINT`. La opcion recomendada es desplegar el Worker incluido en `worker/src/index.ts` y exponerlo en `/api/contact`.
+
+El Worker usa Resend y envia los mensajes a `contacto@elliot-electronics.com`, con `reply_to` apuntando al correo escrito por el cliente para que puedas responder directamente.
+
+Variables del Worker:
+
+```bash
+TO_EMAIL=contacto@elliot-electronics.com
+FROM_EMAIL=contacto@elliot-electronics.com
+ALLOWED_ORIGIN=https://elliot-electronics.com
+```
+
+Secreto requerido:
+
+```bash
+npx wrangler secret put RESEND_API_KEY
+```
 
 ## Documentacion interna
 

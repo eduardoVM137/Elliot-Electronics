@@ -4,16 +4,16 @@
 
 Dominio principal actual:
 
-- `eliot-electronics.com`
+- `elliot-electronics.com`
 
 Variantes defensivas a considerar despues:
 
-- `eliotelectronics.com`
-- `eliotelectronics.mx`
-- `eliot-electronics.mx`
-- `eliot-electronics.com.mx`
+- `elliotelectronics.com`
+- `elliotelectronics.mx`
+- `elliot-electronics.mx`
+- `elliot-electronics.com.mx`
 
-Recomendacion de marca: mantener `eliot-electronics.com` como canonical por ahora y comprar variantes defensivas cuando el presupuesto lo permita.
+Recomendacion de marca: mantener `elliot-electronics.com` como canonical por ahora y comprar variantes defensivas cuando el presupuesto lo permita.
 
 ## 2. Donde comprar
 
@@ -27,7 +27,8 @@ El dominio ya esta en Cloudflare. Mantener DNS y dominio ahi es una buena decisi
 4. Framework preset: Next.js.
 5. Build command: `npm run build`.
 6. Configura la variable:
-   - `NEXT_PUBLIC_SITE_URL=https://eliot-electronics.com`
+   - `NEXT_PUBLIC_SITE_URL=https://elliot-electronics.com`
+   - `NEXT_PUBLIC_CONTACT_ENDPOINT=/api/contact`
 7. Despliega.
 8. Revisa el subdominio temporal `*.vercel.app`.
 
@@ -37,8 +38,8 @@ Despues de que Vercel despliegue correctamente:
 
 1. Entra al proyecto de Vercel.
 2. Ve a Settings > Domains.
-3. Agrega `eliot-electronics.com`.
-4. Agrega `www.eliot-electronics.com`.
+3. Agrega `elliot-electronics.com`.
+4. Agrega `www.elliot-electronics.com`.
 5. Vercel te dira que registros DNS necesita.
 6. En Cloudflare, ve a DNS > Records.
 7. Agrega los registros que Vercel indique.
@@ -56,7 +57,7 @@ Usa siempre el valor exacto del dashboard de Vercel si difiere.
 
 Elige una version principal:
 
-- Recomendado: `https://eliot-electronics.com`
+- Recomendado: `https://elliot-electronics.com`
 - Redireccionar `www` hacia apex, o apex hacia `www`, pero no dejar ambos como versiones independientes.
 
 ## 6. Despues de publicar

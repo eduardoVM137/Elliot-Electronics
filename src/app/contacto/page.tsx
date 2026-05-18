@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, Phone } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { ContactForm } from "@/components/contact/contact-form";
 import { SectionHeader } from "@/components/visuals/section-header";
 import { siteConfig } from "@/lib/site";
 
@@ -18,7 +18,7 @@ export default function ContactPage() {
             <SectionHeader
               eyebrow="Contacto"
               title="Hablemos de tu proyecto."
-              body="Cuéntanos que operacion quieres mejorar: energia, sistemas, electronica, consultoria o soporte."
+              body="Cuentanos que operacion quieres mejorar: energia, sistemas, electronica, consultoria o soporte."
             />
             <div className="mt-8 grid gap-4">
               <div className="inline-flex items-center gap-3 text-muted-foreground">
@@ -36,63 +36,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <form
-            className="premium-panel grid gap-5 rounded-lg p-6"
-            action={`mailto:${siteConfig.email}`}
-            method="post"
-            encType="text/plain"
-          >
-            <div className="grid gap-2">
-              <label className="text-sm text-muted-foreground" htmlFor="name">
-                Nombre
-              </label>
-              <input
-                id="name"
-                name="name"
-                className="h-12 rounded-md border border-white/10 bg-white/[0.05] px-4 text-white outline-none focus:border-eliot-cyan"
-              />
-            </div>
-            <div className="grid gap-2">
-              <label className="text-sm text-muted-foreground" htmlFor="email">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="h-12 rounded-md border border-white/10 bg-white/[0.05] px-4 text-white outline-none focus:border-eliot-cyan"
-              />
-            </div>
-            <div className="grid gap-2">
-              <label className="text-sm text-muted-foreground" htmlFor="solution">
-                Solucion de interes
-              </label>
-              <select
-                id="solution"
-                name="solution"
-                className="h-12 rounded-md border border-white/10 bg-white/[0.05] px-4 text-white outline-none focus:border-eliot-cyan"
-              >
-                <option>Energia / paneles solares</option>
-                <option>Ingenieria</option>
-                <option>Sistemas</option>
-                <option>Electronica</option>
-                <option>Consultoria</option>
-                <option>Helpdesk</option>
-              </select>
-            </div>
-            <div className="grid gap-2">
-              <label className="text-sm text-muted-foreground" htmlFor="message">
-                Mensaje
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={6}
-                className="rounded-md border border-white/10 bg-white/[0.05] p-4 text-white outline-none focus:border-eliot-cyan"
-              />
-            </div>
-            <Button type="submit">Enviar solicitud</Button>
-          </form>
+          <ContactForm />
         </div>
       </div>
     </section>
