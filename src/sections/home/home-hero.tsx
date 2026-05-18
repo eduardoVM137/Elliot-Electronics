@@ -92,7 +92,9 @@ ELIOT ELECTRONICS | INGENIERÍA, ENERGÍA Y TECNOLOGÍA
             transition={{ duration: 0.8, delay: 0.16 }}
             className="mx-auto mt-5 max-w-3xl text-pretty text-base leading-7 text-white/[0.84] md:text-lg md:leading-8"
           >
-     Diseñamos e integramos soluciones en ingeniería, energía solar, electrónica, sistemas e infraestructura técnica para reducir costos, prevenir fallas y mejorar la operación de tu empresa, con consultoría técnica para supervisar proyectos y tomar mejores decisiones.
+            Ayudamos a reducir costos, ordenar proyectos y mantener activos
+            criticos funcionando con paneles solares, ingenieria, sistemas,
+            electronica y soporte tecnico.
           </motion.p>
 
           <motion.div
