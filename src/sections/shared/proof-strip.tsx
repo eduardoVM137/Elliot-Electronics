@@ -7,8 +7,12 @@ export function ProofStrip({ solution }: { solution: Solution }) {
         <div className="grid gap-3 md:grid-cols-3">
           {solution.proof.map((item) => (
             <div key={item.label} className="premium-panel rounded-lg p-5">
-              <p className="text-3xl font-semibold text-white">{item.value}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{item.label}</p>
+              <p className="text-2xl font-semibold text-foreground dark:text-white md:text-3xl">
+                {item.value}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {item.label}
+              </p>
             </div>
           ))}
         </div>

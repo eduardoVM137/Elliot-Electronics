@@ -12,7 +12,9 @@ export function SolutionFeatureGrid({ solution }: SolutionFeatureGridProps) {
           {solution.features.map((feature) => (
             <div key={feature.title} className="premium-panel rounded-lg p-5">
               <feature.icon className="h-6 w-6 text-eliot-cyan" />
-              <h3 className="mt-5 text-base font-semibold text-white">{feature.title}</h3>
+              <h3 className="mt-5 text-base font-semibold text-foreground dark:text-white">
+                {feature.title}
+              </h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.body}</p>
             </div>
           ))}

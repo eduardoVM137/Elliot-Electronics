@@ -166,29 +166,29 @@ export function EnergySimulator() {
   const kpis = [
     {
       icon: LayoutGrid,
-      label: "Paneles",
-      value: panels.length.toString(),
-      detail: `${estimate.totalArea.toFixed(0)} m2 requeridos`,
+      label: "Arreglo propuesto",
+      value: `${panels.length} paneles`,
+      detail: `${estimate.totalArea.toFixed(0)} m2 de techo o terreno aprox.`,
     },
     {
       icon: Zap,
-      label: "Potencia DC",
-      value: `${estimate.dcKw.toFixed(2)} kWp`,
-      detail: `${estimate.acKw.toFixed(2)} kW AC estimados`,
+      label: "Capacidad instalada",
+      value: `${estimate.dcKw.toFixed(1)} kWp`,
+      detail: `${estimate.acKw.toFixed(1)} kW AC hacia inversor`,
     },
     {
       icon: Gauge,
-      label: "Produccion anual",
-      value: `${estimate.annualProduction.toLocaleString("es-MX", {
+      label: "Cobertura estimada",
+      value: `${Math.round(estimate.offset * 100)}%`,
+      detail: `${estimate.annualProduction.toLocaleString("es-MX", {
         maximumFractionDigits: 0,
       })} kWh`,
-      detail: `${Math.round(estimate.offset * 100)}% de cobertura`,
     },
     {
       icon: Cpu,
-      label: "Ahorro anual",
-      value: formatCurrency(estimate.annualSavings),
-      detail: `Retorno ${estimate.roi.toFixed(1)} años`,
+      label: "Resultado preliminar",
+      value: formatCurrency(estimate.investment),
+      detail: `Ahorro anual ${formatCurrency(estimate.annualSavings)}`,
     },
   ];
 
@@ -283,7 +283,7 @@ export function EnergySimulator() {
   }
 
   return (
-    <section className="section-pad bg-background text-foreground dark:bg-eliot-ink dark:text-white">
+    <section className="bg-background py-10 text-foreground dark:bg-eliot-ink dark:text-white md:py-14">
       <div className="container">
         <div className="mb-6 flex flex-col gap-3 md:gap-4">
           <div>
@@ -294,8 +294,8 @@ export function EnergySimulator() {
               Disena el arreglo y mira el impacto al instante.
             </h2>
             <p className="mt-2 max-w-2xl text-xs leading-5 text-muted-foreground dark:text-white/[0.68] md:text-sm">
-              Arrastra paneles al campo, selecciona uno y ajusta su modelo,
-              orientacion, inclinacion y perdidas desde el mismo bloque.
+              Configura consumo, tipo de sistema y paneles para revisar
+              capacidad, cobertura e inversion preliminar en una sola vista.
             </p>
           </div>
 
@@ -304,8 +304,8 @@ export function EnergySimulator() {
           </div>
         </div>
 
-        <div className="grid gap-3 lg:grid-cols-[340px_minmax(0,1fr)]">
-          <aside className="on-dark rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-3 text-white shadow-panel overflow-y-auto max-h-[calc(100vh-400px)]">
+        <div className="grid gap-3 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <aside className="on-dark max-h-[560px] overflow-y-auto rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-3 text-white shadow-panel">
             <div className="border-b border-white/[0.1] pb-3">
               <p className="text-[11px] font-black uppercase text-white">
                 1. Datos de consumo
@@ -586,7 +586,7 @@ export function EnergySimulator() {
           </aside>
 
           <div className="on-dark overflow-hidden rounded-lg border border-white/[0.12] bg-[#07111c] text-white shadow-panel">
-            <div className="flex flex-col gap-2 border-b border-white/[0.1] p-3 md:flex-row md:items-center md:justify-between">
+            <div className="grid gap-2 border-b border-white/[0.1] p-3 md:grid-cols-[1fr_auto] md:items-center">
               <div>
                 <p className="text-[11px] font-black uppercase text-white">
                   Vista previa del sistema
@@ -596,36 +596,53 @@ export function EnergySimulator() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setViewMode("2d")}
-                  className={cn(
-                    "rounded-md border px-2 py-1 text-[10px] font-bold transition",
-                    viewMode === "2d"
-                      ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
-                      : "border-white/[0.1] text-white/[0.68]",
-                  )}
-                >
-                  2D
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode("3d")}
-                  className={cn(
-                    "rounded-md border px-2 py-1 text-[10px] font-bold transition",
-                    viewMode === "3d"
-                      ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
-                      : "border-white/[0.1] text-white/[0.68]",
-                  )}
-                >
-                  3D
-                </button>
+              <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                <div className="rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] px-3 py-1.5">
+                  <p className="text-[9px] uppercase tracking-[0.12em] text-white/[0.5]">
+                    Resultado preliminar
+                  </p>
+                  <p className="text-xs font-black text-white">
+                    {formatCurrency(estimate.investment)}
+                  </p>
+                </div>
+
+                <Button asChild size="sm" className="h-8 px-3 text-xs">
+                  <a href="/contacto">
+                    Solicitar <ArrowRight className="h-3 w-3" />
+                  </a>
+                </Button>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("2d")}
+                    className={cn(
+                      "rounded-md border px-2 py-1 text-[10px] font-bold transition",
+                      viewMode === "2d"
+                        ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
+                        : "border-white/[0.1] text-white/[0.68]",
+                    )}
+                  >
+                    2D
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("3d")}
+                    className={cn(
+                      "rounded-md border px-2 py-1 text-[10px] font-bold transition",
+                      viewMode === "3d"
+                        ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
+                        : "border-white/[0.1] text-white/[0.68]",
+                    )}
+                  >
+                    3D
+                  </button>
+                </div>
               </div>
             </div>
 
             <div
-              className="relative min-h-[420px] overflow-hidden bg-[#081321]"
+              className="relative min-h-[365px] overflow-hidden bg-[#081321] md:min-h-[390px]"
               onDragOver={(event) => event.preventDefault()}
               onDrop={handleCanvasDrop}
             >
@@ -647,7 +664,7 @@ export function EnergySimulator() {
                 </div>
               </div>
 
-              <div className="absolute left-1/2 top-[48%] w-[min(680px,90vw)] -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute left-1/2 top-[47%] w-[min(650px,88vw)] -translate-x-1/2 -translate-y-1/2">
                 <div className="mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.16em] text-white/[0.55]">
                   <span>Campo fotovoltaico</span>
                   <span>{panels.length} modulos</span>
@@ -678,7 +695,7 @@ export function EnergySimulator() {
                           onDragOver={(event) => event.preventDefault()}
                           onDrop={(event) => handlePanelDrop(event, panel.id)}
                           className={cn(
-                            "group relative h-11 overflow-hidden rounded-[4px] border transition hover:-translate-y-0.5",
+                            "group relative h-10 overflow-hidden rounded-[4px] border transition hover:-translate-y-0.5",
                             isSelected
                               ? "border-eliot-cyan shadow-[0_0_28px_rgba(107,233,255,0.58)]"
                               : "border-blue-300/[0.38] shadow-[0_0_16px_rgba(33,167,255,0.14)]",
@@ -702,13 +719,13 @@ export function EnergySimulator() {
                 </div>
               </div>
 
-              <div className="absolute bottom-[100px] left-[16%] hidden h-px w-[48%] bg-gradient-to-r from-eliot-cyan via-eliot-cyan/[0.55] to-transparent md:block" />
-              <div className="absolute bottom-[100px] left-[16%] hidden h-[60px] w-px bg-eliot-cyan/[0.65] md:block" />
-              <div className="absolute bottom-[155px] left-[64%] hidden rounded-full border border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] px-2 py-0.5 text-[10px] font-semibold text-eliot-cyan md:block">
+              <div className="absolute bottom-[86px] left-[16%] hidden h-px w-[48%] bg-gradient-to-r from-eliot-cyan via-eliot-cyan/[0.55] to-transparent md:block" />
+              <div className="absolute bottom-[86px] left-[16%] hidden h-[52px] w-px bg-eliot-cyan/[0.65] md:block" />
+              <div className="absolute bottom-[137px] left-[64%] hidden rounded-full border border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] px-2 py-0.5 text-[10px] font-semibold text-eliot-cyan md:block">
                 Bus DC
               </div>
 
-              <div className="absolute bottom-6 left-6 w-[min(340px,calc(100%-3rem))] rounded-lg border border-eliot-cyan/[0.26] bg-[#0b1320] p-3 shadow-glow">
+              <div className="absolute bottom-4 left-4 w-[min(320px,calc(100%-2rem))] rounded-lg border border-eliot-cyan/[0.26] bg-[#0b1320] p-3 shadow-glow">
                 <div className="flex items-center gap-2">
                   <span className="flex h-9 w-9 items-center justify-center rounded-md border border-eliot-cyan/[0.26] bg-eliot-cyan/[0.08] text-eliot-cyan shrink-0">
                     <Cpu className="h-4 w-4" />
@@ -749,21 +766,6 @@ export function EnergySimulator() {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-col gap-2 rounded-lg border border-white/[0.1] bg-white/[0.035] p-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs font-semibold text-white">
-              Resultado preliminar: {formatCurrency(estimate.investment)}
-            </p>
-            <p className="mt-0.5 text-xs text-white/[0.62]">
-              Se confirma con visita tecnica, levantamiento de sitio y recibos reales.
-            </p>
-          </div>
-          <Button asChild className="shrink-0 h-9">
-            <a href="/contacto">
-              Solicitar propuesta <ArrowRight className="h-3 w-3 ml-1" />
-            </a>
-          </Button>
-        </div>
       </div>
     </section>
   );
@@ -781,15 +783,19 @@ function KpiTile({
   detail: string;
 }) {
   return (
-    <div className="bg-[#07111c] p-2.5">
-      <div className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan shrink-0">
+    <div className="bg-[#07111c] p-3">
+      <div className="flex items-start gap-2.5">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan">
           <Icon className="h-3.5 w-3.5" />
         </span>
         <div className="min-w-0">
-          <p className="text-sm font-black text-white">{value}</p>
-          <p className="text-[10px] font-semibold text-white/[0.68]">{label}</p>
-          <p className="mt-0.5 truncate text-[10px] text-white/[0.45]">{detail}</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/[0.52]">
+            {label}
+          </p>
+          <p className="mt-1 text-sm font-black text-white">{value}</p>
+          <p className="mt-0.5 text-[10px] leading-4 text-white/[0.52]">
+            {detail}
+          </p>
         </div>
       </div>
     </div>

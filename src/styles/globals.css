@@ -222,23 +222,7 @@
     background-color: hsl(var(--background)) !important;
   }
 
-  .light .on-dark .text-white {
-    color: #0f2346 !important;
+  .light .to-eliot-ink {
+    --tw-gradient-to: hsl(var(--background)) var(--tw-gradient-to-position) !important;
   }
-
-  .light .on-dark p,
-  .light .on-dark label,
-  .light .on-dark button {
-    color: #0f2346 !important;
-  }
-
-  .light .on-dark .text-white\/\[0\.58\],
-  .light .on-dark .text-white\/\[0\.62\],
-  .light .on-dark .text-white\/\[0\.68\],
-  .light .on-dark .text-white\/\[0\.72\] {
-    color: #556b8c !important;
-  }
-
-  .light .on-dark .text-eliot-cyan {
-    color: #006d99 !important;
-  }
+}
