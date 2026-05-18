@@ -60,17 +60,19 @@ const buildEmailHtml = ({
   email,
   solution,
   message,
+  copyEmail,
 }: {
   name: string;
   email: string;
   solution: string;
   message: string;
+  copyEmail: string;
 }) => {
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
   const safeSolution = escapeHtml(solution);
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
-  const replyUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(
+  const replyUrl = `mailto:${email}?cc=${copyEmail}&subject=${encodeURIComponent(
     `Re: ${solution}`,
   )}`;
 
@@ -193,6 +195,7 @@ export default {
 
     const fromEmail = env.FROM_EMAIL || DEFAULT_FROM_EMAIL;
     const toEmails = parseRecipients(env.TO_EMAIL);
+    const [primaryEmail = DEFAULT_TO_EMAIL, ...bccEmails] = toEmails;
 
     if (!env.RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY");
@@ -207,10 +210,17 @@ export default {
       },
       body: JSON.stringify({
         from: `Elliot Electronics <${fromEmail}>`,
-        to: toEmails,
+        to: [primaryEmail],
+        bcc: bccEmails,
         reply_to: email,
         subject: `Nuevo contacto de ${name} - ${solution}`,
-        html: buildEmailHtml({ name, email, solution, message }),
+        html: buildEmailHtml({
+          name,
+          email,
+          solution,
+          message,
+          copyEmail: fromEmail,
+        }),
         text: buildEmailText({ name, email, solution, message }),
       }),
     });
