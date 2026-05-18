@@ -2,186 +2,711 @@
 
 import { useMemo, useState } from "react";
 import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+  ArrowRight,
+  Boxes,
+  Cpu,
+  LayoutGrid,
+  Move,
+  RotateCw,
+  Trash2,
+  Zap,
+} from "lucide-react";
 
-import { ChartFrame } from "@/components/visuals/chart-frame";
-import { formatCurrency } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { cn, formatCurrency } from "@/lib/utils";
 
-const monthlyCurve = [
-  "Ene",
-  "Feb",
-  "Mar",
-  "Abr",
-  "May",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dic",
+type OrientationId = "sur" | "sureste" | "suroeste" | "este-oeste";
+
+type PanelTemplate = {
+  id: string;
+  name: string;
+  watts: number;
+  efficiency: number;
+  area: number;
+  cost: number;
+};
+
+type SolarPanel = {
+  id: number;
+  templateId: string;
+  watts: number;
+  orientation: OrientationId;
+  tilt: number;
+  losses: number;
+};
+
+const panelTemplates: PanelTemplate[] = [
+  {
+    id: "trina-550",
+    name: "Trina Solar Vertex S+ 550W",
+    watts: 550,
+    efficiency: 21.4,
+    area: 2.45,
+    cost: 4050,
+  },
+  {
+    id: "jinko-580",
+    name: "Jinko Tiger Neo 580W",
+    watts: 580,
+    efficiency: 22.1,
+    area: 2.58,
+    cost: 4380,
+  },
+  {
+    id: "canadian-610",
+    name: "Canadian Solar 610W",
+    watts: 610,
+    efficiency: 22.6,
+    area: 2.72,
+    cost: 4720,
+  },
 ];
+
+const orientations: Record<
+  OrientationId,
+  { label: string; factor: number }
+> = {
+  sur: { label: "Sur (180)", factor: 1 },
+  sureste: { label: "Sureste (135)", factor: 0.94 },
+  suroeste: { label: "Suroeste (225)", factor: 0.92 },
+  "este-oeste": { label: "Este / Oeste", factor: 0.87 },
+};
+
+const seedPanels: SolarPanel[] = Array.from({ length: 32 }, (_, index) => ({
+  id: index + 1,
+  templateId: "trina-550",
+  watts: 550,
+  orientation: "sur",
+  tilt: 15,
+  losses: 9,
+}));
+
+function getPanelTemplate(id: string) {
+  return panelTemplates.find((template) => template.id === id) ?? panelTemplates[0];
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function buildSolarPanel(id: number, templateId: string): SolarPanel {
+  const template = getPanelTemplate(templateId);
+
+  return {
+    id,
+    templateId,
+    watts: template.watts,
+    orientation: "sur",
+    tilt: 15,
+    losses: 9,
+  };
+}
 
 export function EnergySimulator() {
   const [monthlyBill, setMonthlyBill] = useState(12500);
-  const [demand, setDemand] = useState(50);
+  const [kwhCost, setKwhCost] = useState(2.45);
+  const [systemType, setSystemType] = useState("Interconectado");
+  const [selectedTemplate, setSelectedTemplate] = useState(panelTemplates[0].id);
+  const [panels, setPanels] = useState<SolarPanel[]>(seedPanels);
+  const [selectedPanelId, setSelectedPanelId] = useState<number | null>(1);
+  const [viewMode, setViewMode] = useState<"2d" | "3d">("3d");
+
+  const selectedPanel =
+    panels.find((panel) => panel.id === selectedPanelId) ?? panels[0] ?? null;
 
   const estimate = useMemo(() => {
-    const annualSpend = monthlyBill * 12;
-    const annualSavings = annualSpend * 0.62;
-    const investment = demand * 22500;
-    const roi = investment / annualSavings;
-    const production = demand * 1464;
+    const sunHours = 5.25;
+    const monthlyConsumption = monthlyBill / Math.max(kwhCost, 0.1);
 
-    const data = monthlyCurve.map((month, index) => {
-      const seasonal = 0.84 + Math.sin((index / 12) * Math.PI) * 0.34;
-      return {
-        month,
-        consumo: Math.round(monthlyBill * (0.86 + index * 0.01)),
-        ahorro: Math.round((annualSavings / 12) * seasonal),
-      };
+    const production = panels.reduce((total, panel) => {
+      const orientation = orientations[panel.orientation].factor;
+      const tiltFactor = clamp(1 - Math.abs(panel.tilt - 18) * 0.004, 0.9, 1);
+      const lossFactor = 1 - panel.losses / 100;
+      return total + (panel.watts / 1000) * sunHours * 365 * orientation * tiltFactor * lossFactor;
+    }, 0);
+
+    const totalDcKw = panels.reduce((total, panel) => total + panel.watts, 0) / 1000;
+    const totalArea = panels.reduce(
+      (total, panel) => total + getPanelTemplate(panel.templateId).area,
+      0,
+    );
+    const avgLosses = panels.length
+      ? panels.reduce((total, panel) => total + panel.losses, 0) / panels.length
+      : 0;
+    const annualConsumption = monthlyConsumption * 12;
+    const usefulProduction = Math.min(production, annualConsumption * 0.95);
+    const annualSavings = usefulProduction * kwhCost;
+    const hardwareCost = panels.reduce(
+      (total, panel) => total + getPanelTemplate(panel.templateId).cost,
+      0,
+    );
+    const balanceOfSystem = totalDcKw * 6400 + 68000;
+    const investment = panels.length ? hardwareCost + balanceOfSystem : 0;
+    const roi = annualSavings > 0 ? investment / annualSavings : 0;
+    const inverterCount = panels.length ? Math.max(1, Math.ceil(totalDcKw / 50)) : 0;
+    const instantProduction = totalDcKw * 0.73 * (1 - avgLosses / 100);
+    const offset = annualConsumption > 0 ? usefulProduction / annualConsumption : 0;
+
+    return {
+      annualSavings,
+      annualProduction: production,
+      avgLosses,
+      dcKw: totalDcKw,
+      acKw: totalDcKw * 0.96,
+      instantProduction,
+      investment,
+      inverterCount,
+      offset,
+      roi,
+      totalArea,
+    };
+  }, [kwhCost, monthlyBill, panels]);
+
+  const selectedTemplateData = getPanelTemplate(selectedTemplate);
+
+  function addPanel(templateId = selectedTemplate) {
+    const nextId = panels.reduce((max, panel) => Math.max(max, panel.id), 0) + 1;
+    setPanels([...panels, buildSolarPanel(nextId, templateId)]);
+    setSelectedPanelId(nextId);
+  }
+
+  function addPanelRow() {
+    const maxId = panels.reduce((max, panel) => Math.max(max, panel.id), 0);
+    const newPanels = Array.from({ length: 8 }, (_, index) =>
+      buildSolarPanel(maxId + index + 1, selectedTemplate),
+    );
+    setPanels([...panels, ...newPanels]);
+    setSelectedPanelId(maxId + 1);
+  }
+
+  function removeSelectedPanel() {
+    if (!selectedPanel) return;
+
+    const nextPanels = panels.filter((panel) => panel.id !== selectedPanel.id);
+    setPanels(nextPanels);
+    setSelectedPanelId(nextPanels[0]?.id ?? null);
+  }
+
+  function updateSelectedPanel(update: Partial<SolarPanel>) {
+    if (!selectedPanel) return;
+
+    setPanels((current) =>
+      current.map((panel) =>
+        panel.id === selectedPanel.id ? { ...panel, ...update } : panel,
+      ),
+    );
+  }
+
+  function handleTemplateDrag(event: React.DragEvent<HTMLButtonElement>, templateId: string) {
+    event.dataTransfer.effectAllowed = "copy";
+    event.dataTransfer.setData("template-id", templateId);
+  }
+
+  function handlePanelDrag(event: React.DragEvent<HTMLButtonElement>, panelId: number) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("panel-id", String(panelId));
+  }
+
+  function handleCanvasDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const templateId = event.dataTransfer.getData("template-id");
+
+    if (templateId) {
+      addPanel(templateId);
+    }
+  }
+
+  function handlePanelDrop(event: React.DragEvent<HTMLButtonElement>, targetId: number) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const sourceId = Number(event.dataTransfer.getData("panel-id"));
+    const templateId = event.dataTransfer.getData("template-id");
+
+    if (templateId) {
+      addPanel(templateId);
+      return;
+    }
+
+    if (!sourceId || sourceId === targetId) return;
+
+    setPanels((current) => {
+      const sourceIndex = current.findIndex((panel) => panel.id === sourceId);
+      const targetIndex = current.findIndex((panel) => panel.id === targetId);
+      if (sourceIndex < 0 || targetIndex < 0) return current;
+
+      const nextPanels = [...current];
+      const [moved] = nextPanels.splice(sourceIndex, 1);
+      nextPanels.splice(targetIndex, 0, moved);
+      return nextPanels;
     });
-
-    const mix = [
-      { name: "Red", value: Math.round(annualSpend - annualSavings) },
-      { name: "Solar", value: Math.round(annualSavings) },
-    ];
-
-    return { annualSavings, investment, roi, production, data, mix };
-  }, [monthlyBill, demand]);
+  }
 
   return (
-    <section className="section-pad">
+    <section className="image-surface section-pad bg-eliot-ink text-white">
       <div className="container">
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-medium uppercase text-eliot-cyan">
-              Simulador solar
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-eliot-cyan">
+              Simula tu sistema solar
             </p>
-            <h2 className="mt-4 text-balance text-3xl font-semibold text-white md:text-5xl">
-              Calcula tu ahorro en minutos.
+            <h2 className="mt-3 text-balance text-3xl font-semibold text-white md:text-5xl">
+              Disena el arreglo y mira el impacto al instante.
             </h2>
-            <p className="mt-5 text-pretty leading-7 text-muted-foreground">
-              Una estimacion ejecutiva para dimensionar inversion, potencia,
-              produccion y retorno sin convertir el sitio en una app compleja.
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/[0.68] md:text-base">
+              Arrastra paneles al campo, selecciona cualquiera para ajustar su
+              configuracion y compara potencia, area, ahorro e inversion.
             </p>
-
-            <div className="mt-8 grid gap-5">
-              <label className="premium-panel block rounded-lg p-5">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Consumo mensual</span>
-                  <strong className="text-lg text-white">{formatCurrency(monthlyBill)}</strong>
-                </div>
-                <input
-                  type="range"
-                  min={8000}
-                  max={180000}
-                  step={2500}
-                  value={monthlyBill}
-                  onChange={(event) => setMonthlyBill(Number(event.target.value))}
-                  className="mt-5 w-full accent-eliot-electric"
-                />
-              </label>
-
-              <label className="premium-panel block rounded-lg p-5">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm text-muted-foreground">Potencia objetivo</span>
-                  <strong className="text-lg text-white">{demand} kWp</strong>
-                </div>
-                <input
-                  type="range"
-                  min={20}
-                  max={550}
-                  step={10}
-                  value={demand}
-                  onChange={(event) => setDemand(Number(event.target.value))}
-                  className="mt-5 w-full accent-eliot-electric"
-                />
-              </label>
-            </div>
           </div>
 
-          <div className="premium-panel overflow-hidden rounded-lg">
-            <div className="grid gap-px bg-white/10 md:grid-cols-3">
-              <div className="bg-eliot-night/80 p-5">
-                <p className="text-xs text-muted-foreground">Ahorro anual estimado</p>
-                <p className="mt-2 text-2xl font-semibold text-white">
-                  {formatCurrency(estimate.annualSavings)}
-                </p>
-              </div>
-              <div className="bg-eliot-night/80 p-5">
-                <p className="text-xs text-muted-foreground">Retorno</p>
-                <p className="mt-2 text-2xl font-semibold text-white">
-                  {estimate.roi.toFixed(1)} anos
-                </p>
-              </div>
-              <div className="bg-eliot-night/80 p-5">
-                <p className="text-xs text-muted-foreground">Produccion anual</p>
-                <p className="mt-2 text-2xl font-semibold text-white">
-                  {estimate.production.toLocaleString("es-MX")} kWh
-                </p>
+          <div className="rounded-full border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.08] px-4 py-2 text-sm font-semibold text-eliot-cyan">
+            {panels.length} paneles configurados
+          </div>
+        </div>
+
+        <div className="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
+          <aside className="rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-4 shadow-panel">
+            <div className="border-b border-white/[0.1] pb-4">
+              <p className="text-xs font-black uppercase text-white">
+                1. Datos de consumo
+              </p>
+              <div className="mt-4 grid gap-3">
+                <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                  Consumo mensual
+                  <div className="flex overflow-hidden rounded-md border border-white/[0.12] bg-white/[0.04]">
+                    <input
+                      type="number"
+                      value={monthlyBill}
+                      min={1000}
+                      onChange={(event) => setMonthlyBill(Number(event.target.value))}
+                      className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm font-semibold text-white outline-none"
+                    />
+                    <span className="border-l border-white/[0.1] px-3 py-2 text-xs font-bold text-eliot-cyan">
+                      MXN
+                    </span>
+                  </div>
+                </label>
+
+                <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                  Costo por kWh
+                  <div className="flex overflow-hidden rounded-md border border-white/[0.12] bg-white/[0.04]">
+                    <input
+                      type="number"
+                      value={kwhCost}
+                      min={0.5}
+                      step={0.05}
+                      onChange={(event) => setKwhCost(Number(event.target.value))}
+                      className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm font-semibold text-white outline-none"
+                    />
+                    <span className="border-l border-white/[0.1] px-3 py-2 text-xs font-bold text-white/[0.72]">
+                      kWh
+                    </span>
+                  </div>
+                </label>
+
+                <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                  Tipo de sistema
+                  <select
+                    value={systemType}
+                    onChange={(event) => setSystemType(event.target.value)}
+                    className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                  >
+                    <option>Interconectado</option>
+                    <option>Hibrido</option>
+                    <option>Aislado</option>
+                  </select>
+                </label>
               </div>
             </div>
 
-            <div className="grid gap-0 md:grid-cols-[1.25fr_0.75fr]">
-              <ChartFrame className="h-80 p-5">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={estimate.data}>
-                    <defs>
-                      <linearGradient id="energySavings" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="5%" stopColor="#6be9ff" stopOpacity={0.5} />
-                        <stop offset="95%" stopColor="#6be9ff" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-                    <XAxis dataKey="month" stroke="#8aa4b8" fontSize={12} />
-                    <YAxis stroke="#8aa4b8" fontSize={12} />
-                    <Tooltip
-                      contentStyle={{
-                        background: "#07111c",
-                        border: "1px solid rgba(255,255,255,0.12)",
-                        borderRadius: 8,
+            <div className="border-b border-white/[0.1] py-4">
+              <p className="text-xs font-black uppercase text-white">
+                2. Arrastra paneles
+              </p>
+              <div className="mt-3 grid gap-2">
+                {panelTemplates.map((template) => (
+                  <button
+                    key={template.id}
+                    type="button"
+                    draggable
+                    onClick={() => setSelectedTemplate(template.id)}
+                    onDragStart={(event) => handleTemplateDrag(event, template.id)}
+                    className={cn(
+                      "flex cursor-grab items-center justify-between rounded-md border p-3 text-left transition active:cursor-grabbing",
+                      selectedTemplate === template.id
+                        ? "border-eliot-cyan/[0.55] bg-eliot-cyan/[0.1]"
+                        : "border-white/[0.1] bg-white/[0.035] hover:border-eliot-cyan/[0.35]",
+                    )}
+                  >
+                    <span>
+                      <span className="block text-sm font-semibold text-white">
+                        {template.name}
+                      </span>
+                      <span className="mt-1 block text-xs text-white/[0.58]">
+                        {template.efficiency}% eficiencia | {template.area.toFixed(2)} m2
+                      </span>
+                    </span>
+                    <span className="text-sm font-black text-eliot-cyan">
+                      {template.watts}W
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Button type="button" onClick={() => addPanel()} className="h-10">
+                  Agregar 1
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={addPanelRow}
+                  className="h-10"
+                >
+                  Agregar fila
+                </Button>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <p className="text-xs font-black uppercase text-white">
+                3. Configuracion del panel
+              </p>
+
+              {selectedPanel ? (
+                <div className="mt-4 grid gap-3">
+                  <div className="flex items-center justify-between rounded-md border border-white/[0.1] bg-white/[0.035] p-3">
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Panel #{selectedPanel.id}
+                      </p>
+                      <p className="mt-1 text-xs text-white/[0.58]">
+                        Edita este modulo sin afectar los demas.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={removeSelectedPanel}
+                      className="rounded-md border border-white/[0.12] p-2 text-white/[0.72] transition hover:border-red-400/40 hover:text-red-300"
+                      aria-label="Eliminar panel seleccionado"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                    Modelo
+                    <select
+                      value={selectedPanel.templateId}
+                      onChange={(event) => {
+                        const nextTemplate = getPanelTemplate(event.target.value);
+                        updateSelectedPanel({
+                          templateId: nextTemplate.id,
+                          watts: nextTemplate.watts,
+                        });
                       }}
+                      className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                    >
+                      {panelTemplates.map((template) => (
+                        <option key={template.id} value={template.id}>
+                          {template.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                    Orientacion
+                    <select
+                      value={selectedPanel.orientation}
+                      onChange={(event) =>
+                        updateSelectedPanel({
+                          orientation: event.target.value as OrientationId,
+                        })
+                      }
+                      className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                    >
+                      {Object.entries(orientations).map(([id, orientation]) => (
+                        <option key={id} value={id}>
+                          {orientation.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="grid gap-2 text-xs text-white/[0.62]">
+                    Inclinacion: {selectedPanel.tilt} grados
+                    <input
+                      type="range"
+                      min={5}
+                      max={30}
+                      value={selectedPanel.tilt}
+                      onChange={(event) =>
+                        updateSelectedPanel({ tilt: Number(event.target.value) })
+                      }
+                      className="w-full accent-eliot-electric"
                     />
-                    <Area
-                      type="monotone"
-                      dataKey="ahorro"
-                      stroke="#6be9ff"
-                      strokeWidth={2}
-                      fill="url(#energySavings)"
+                  </label>
+
+                  <label className="grid gap-2 text-xs text-white/[0.62]">
+                    Perdidas estimadas: {selectedPanel.losses}%
+                    <input
+                      type="range"
+                      min={4}
+                      max={18}
+                      value={selectedPanel.losses}
+                      onChange={(event) =>
+                        updateSelectedPanel({ losses: Number(event.target.value) })
+                      }
+                      className="w-full accent-eliot-electric"
                     />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </ChartFrame>
-              <ChartFrame className="h-80 border-t border-white/10 p-5 md:border-l md:border-t-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={estimate.mix}>
-                    <XAxis dataKey="name" stroke="#8aa4b8" fontSize={12} />
-                    <YAxis hide />
-                    <Tooltip
-                      contentStyle={{
-                        background: "#07111c",
-                        border: "1px solid rgba(255,255,255,0.12)",
-                        borderRadius: 8,
+                  </label>
+                </div>
+              ) : (
+                <p className="mt-4 rounded-md border border-white/[0.1] bg-white/[0.035] p-3 text-sm text-white/[0.64]">
+                  Arrastra un panel a la vista previa para comenzar.
+                </p>
+              )}
+            </div>
+          </aside>
+
+          <div className="overflow-hidden rounded-lg border border-white/[0.12] bg-[#07111c] shadow-panel">
+            <div className="flex flex-col gap-3 border-b border-white/[0.1] p-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase text-white">
+                  Vista previa del sistema
+                </p>
+                <p className="mt-1 text-xs text-white/[0.58]">
+                  Suelta paneles en el campo. Selecciona un modulo para configurarlo.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("2d")}
+                  className={cn(
+                    "rounded-md border px-3 py-2 text-xs font-bold transition",
+                    viewMode === "2d"
+                      ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
+                      : "border-white/[0.1] text-white/[0.68]",
+                  )}
+                >
+                  2D
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("3d")}
+                  className={cn(
+                    "rounded-md border px-3 py-2 text-xs font-bold transition",
+                    viewMode === "3d"
+                      ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
+                      : "border-white/[0.1] text-white/[0.68]",
+                  )}
+                >
+                  3D
+                </button>
+              </div>
+            </div>
+
+            <div
+              className="relative min-h-[560px] overflow-hidden bg-[#081321]"
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={handleCanvasDrop}
+            >
+              <div className="absolute inset-0 bg-technical-grid opacity-55" />
+              <div className="absolute left-12 top-16 rounded-md border border-eliot-cyan/[0.22] bg-eliot-ink/[0.72] p-4 backdrop-blur-xl">
+                <p className="text-xs text-white/[0.58]">Produccion instantanea</p>
+                <p className="mt-2 text-3xl font-black text-eliot-cyan">
+                  {estimate.instantProduction.toFixed(2)} kW
+                </p>
+                <div className="mt-3 flex h-8 items-end gap-1">
+                  {[0.42, 0.56, 0.48, 0.72, 0.64, 0.88, 0.76, 0.92].map(
+                    (height, index) => (
+                      <span
+                        key={index}
+                        className="w-2 rounded-full bg-eliot-cyan/[0.72]"
+                        style={{ height: `${height * 100}%` }}
+                      />
+                    ),
+                  )}
+                </div>
+              </div>
+
+              <div className="absolute bottom-20 left-10 hidden w-52 rounded-md border border-eliot-cyan/[0.26] bg-[#0b1320] p-4 shadow-glow md:block">
+                <div className="flex items-center justify-between border-b border-white/[0.1] pb-3">
+                  <span className="text-xs font-semibold text-eliot-cyan">
+                    INVERSOR
+                  </span>
+                  <span className="text-xs text-white/[0.58]">{systemType}</span>
+                </div>
+                <div className="mt-4 h-12 rounded bg-black/[0.28]" />
+                <p className="mt-3 text-sm font-semibold text-white">
+                  {estimate.acKw.toFixed(2)} kWp AC
+                </p>
+              </div>
+
+              <div
+                className="absolute left-1/2 top-[52%] grid w-[min(760px,76vw)] -translate-x-1/2 -translate-y-1/2 grid-cols-8 gap-2"
+                style={{
+                  transform:
+                    viewMode === "3d"
+                      ? "translate(-50%, -50%) perspective(1050px) rotateX(58deg) rotateZ(-16deg)"
+                      : "translate(-50%, -50%)",
+                  transformOrigin: "center",
+                }}
+              >
+                {panels.map((panel) => {
+                  const template = getPanelTemplate(panel.templateId);
+                  const isSelected = selectedPanel?.id === panel.id;
+
+                  return (
+                    <button
+                      key={panel.id}
+                      type="button"
+                      draggable
+                      onClick={() => setSelectedPanelId(panel.id)}
+                      onDragStart={(event) => handlePanelDrag(event, panel.id)}
+                      onDragOver={(event) => event.preventDefault()}
+                      onDrop={(event) => handlePanelDrop(event, panel.id)}
+                      className={cn(
+                        "group relative h-12 overflow-hidden rounded-[3px] border transition hover:-translate-y-0.5",
+                        isSelected
+                          ? "border-eliot-cyan shadow-[0_0_24px_rgba(107,233,255,0.55)]"
+                          : "border-blue-300/[0.38] shadow-[0_0_16px_rgba(33,167,255,0.18)]",
+                      )}
+                      style={{
+                        backgroundColor: "#09215e",
+                        backgroundImage:
+                          "linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(135deg, rgba(33,167,255,0.34), rgba(3,12,38,0.1))",
+                        backgroundSize: "18px 100%, 100% 12px, 100% 100%",
                       }}
-                    />
-                    <Bar dataKey="value" fill="#21a7ff" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartFrame>
+                      title={`${template.name} | ${panel.watts}W`}
+                    >
+                      <span className="absolute inset-x-2 top-1 h-px bg-white/[0.26]" />
+                      <span className="sr-only">
+                        Configurar panel {panel.id}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {panels.length === 0 && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="rounded-lg border border-dashed border-eliot-cyan/[0.45] bg-eliot-cyan/[0.08] p-6 text-center">
+                    <Move className="mx-auto h-8 w-8 text-eliot-cyan" />
+                    <p className="mt-3 text-sm font-semibold text-white">
+                      Arrastra un panel aqui
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid gap-px bg-white/[0.08] sm:grid-cols-2 xl:grid-cols-5">
+              <Metric
+                icon={LayoutGrid}
+                label="Area requerida"
+                value={`${estimate.totalArea.toFixed(0)} m2`}
+              />
+              <Metric
+                icon={RotateCw}
+                label="Perdidas estimadas"
+                value={`${estimate.avgLosses.toFixed(1)}%`}
+              />
+              <Metric
+                icon={Cpu}
+                label="Inversores"
+                value={String(estimate.inverterCount)}
+              />
+              <Metric
+                icon={Zap}
+                label="Potencia DC"
+                value={`${estimate.dcKw.toFixed(2)} kWp`}
+              />
+              <Metric
+                icon={Boxes}
+                label="Paneles"
+                value={String(panels.length)}
+              />
             </div>
           </div>
         </div>
+
+        <div className="mt-4 grid gap-4 lg:grid-cols-4">
+          <SummaryTile
+            label="Ahorro anual estimado"
+            value={formatCurrency(estimate.annualSavings)}
+          />
+          <SummaryTile
+            label="Retorno de inversion"
+            value={`${estimate.roi.toFixed(1)} anos`}
+          />
+          <SummaryTile
+            label="Produccion anual"
+            value={`${estimate.annualProduction.toLocaleString("es-MX", {
+              maximumFractionDigits: 0,
+            })} kWh`}
+          />
+          <SummaryTile
+            label="Cobertura del consumo"
+            value={`${Math.round(estimate.offset * 100)}%`}
+          />
+        </div>
+
+        <div className="mt-5 flex flex-col gap-3 rounded-lg border border-white/[0.1] bg-white/[0.035] p-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-white">
+              Sistema recomendado: {selectedTemplateData.name}
+            </p>
+            <p className="mt-1 text-sm text-white/[0.62]">
+              Inversion estimada: {formatCurrency(estimate.investment)}. Esta
+              simulacion es preliminar y se confirma con visita tecnica.
+            </p>
+          </div>
+          <Button asChild className="shrink-0">
+            <a href="/contacto">
+              Solicitar propuesta <ArrowRight className="h-4 w-4" />
+            </a>
+          </Button>
+        </div>
       </div>
     </section>
+  );
+}
+
+function Metric({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="bg-[#07111c] p-4">
+      <div className="flex items-center gap-3">
+        <span className="flex h-9 w-9 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan">
+          <Icon className="h-4 w-4" />
+        </span>
+        <div>
+          <p className="text-base font-black text-white">{value}</p>
+          <p className="text-xs text-white/[0.58]">{label}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SummaryTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-white/[0.1] bg-white/[0.045] p-5">
+      <p className="text-xs uppercase tracking-[0.18em] text-white/[0.52]">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-black text-white">{value}</p>
+    </div>
   );
 }
