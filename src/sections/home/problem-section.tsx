@@ -31,7 +31,7 @@ export function ProblemSection() {
     <section className="section-pad">
       <div className="container">
         <SectionHeader
-          eyebrow="Por que elegir Elliot"
+          eyebrow="Por que eleginos"
           title="No vendemos equipos aislados: disenamos infraestructura tecnica para operar mejor."
           body="El cliente recibe una propuesta tecnica y financiera entendible, con acompanamiento desde el diagnostico hasta el mantenimiento."
         />

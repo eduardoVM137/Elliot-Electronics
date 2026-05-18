@@ -25,7 +25,7 @@ export const projects: Project[] = [
     stats: [
       { label: "Capacidad", value: "120 kWp" },
       { label: "Ahorro anual", value: "34%" },
-      { label: "ROI", value: "3.1 anos" },
+      { label: "ROI", value: "3.1 años" },
     ],
   },
   {
@@ -92,7 +92,7 @@ export const projects: Project[] = [
     impact: "Portafolio ejecutivo con escenarios de inversion, riesgo y retorno.",
     stats: [
       { label: "Iniciativas", value: "18" },
-      { label: "ROI", value: "2.4 anos" },
+      { label: "ROI", value: "2.4 años" },
       { label: "Prioridad", value: "90 dias" },
     ],
   },
