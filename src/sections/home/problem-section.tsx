@@ -32,7 +32,7 @@ export function ProblemSection() {
       <div className="container">
         <SectionHeader
           eyebrow="Por que eleginos"
-          title="No vendemos equipos aislados: disenamos infraestructura tecnica para operar mejor."
+          title="No vendemos equipos aislados: diseñamos infraestructura tecnica para operar mejor."
           body="El cliente recibe una propuesta tecnica y financiera entendible, con acompanamiento desde el diagnostico hasta el mantenimiento."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

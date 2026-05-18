@@ -9,7 +9,7 @@ export function ApproachSection() {
         <SectionHeader
           eyebrow="Nuestro proceso"
           title="Del reto tecnico a una operacion medible."
-          body="Levantamos necesidades, disenamos la solucion, implementamos con ingenieria y dejamos soporte para continuidad."
+          body="Levantamos necesidades, diseñamos la solucion, implementamos con ingenieria y dejamos soporte para continuidad."
           align="center"
         />
         <div className="mt-14">

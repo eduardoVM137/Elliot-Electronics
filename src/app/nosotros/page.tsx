@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const values = [
   { title: "Rigor tecnico", body: "Cada decision se documenta, prueba y mide.", icon: ShieldCheck },
   { title: "Vision integral", body: "Energia, hardware, software y soporte trabajando juntos.", icon: Workflow },
-  { title: "Operacion primero", body: "Disenamos para continuidad, mantenimiento y crecimiento.", icon: Building2 },
+  { title: "Operacion primero", body: "Diseñamos para continuidad, mantenimiento y crecimiento.", icon: Building2 },
   { title: "Innovacion sobria", body: "Tecnologia util, implementable y alineada al negocio.", icon: Lightbulb },
   { title: "Arquitectura escalable", body: "Componentes modulares para nuevas lineas y sedes.", icon: Cpu },
   { title: "Acompanamiento", body: "Soporte tecnico despues de la implementacion.", icon: Headphones },
