@@ -285,33 +285,33 @@ export function EnergySimulator() {
   return (
     <section className="section-pad bg-background text-foreground dark:bg-eliot-ink dark:text-white">
       <div className="container">
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="mb-6 flex flex-col gap-3 md:gap-4">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-eliot-cyan">
               Simula tu sistema solar
             </p>
-            <h2 className="mt-3 text-balance text-3xl font-semibold text-foreground dark:text-white md:text-5xl">
+            <h2 className="mt-2 text-balance text-2xl font-semibold text-foreground dark:text-white md:text-4xl">
               Disena el arreglo y mira el impacto al instante.
             </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground dark:text-white/[0.68] md:text-base">
+            <p className="mt-2 max-w-2xl text-xs leading-5 text-muted-foreground dark:text-white/[0.68] md:text-sm">
               Arrastra paneles al campo, selecciona uno y ajusta su modelo,
               orientacion, inclinacion y perdidas desde el mismo bloque.
             </p>
           </div>
 
-          <div className="rounded-full border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.08] px-4 py-2 text-sm font-semibold text-eliot-cyan">
+          <div className="rounded-full border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.08] px-3 py-1 w-fit text-xs font-semibold text-eliot-cyan">
             {panels.length} paneles activos
           </div>
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
-          <aside className="on-dark rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-4 text-white shadow-panel">
-            <div className="border-b border-white/[0.1] pb-4">
-              <p className="text-xs font-black uppercase text-white">
+        <div className="grid gap-3 lg:grid-cols-[340px_minmax(0,1fr)]">
+          <aside className="on-dark rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-3 text-white shadow-panel overflow-y-auto max-h-[calc(100vh-400px)]">
+            <div className="border-b border-white/[0.1] pb-3">
+              <p className="text-[11px] font-black uppercase text-white">
                 1. Datos de consumo
               </p>
-              <div className="mt-4 grid gap-3">
-                <label className="grid gap-1.5 text-xs text-white/[0.62]">
+              <div className="mt-3 grid gap-2">
+                <label className="grid gap-1 text-[11px] text-white/[0.62]">
                   Consumo mensual
                   <div className="flex overflow-hidden rounded-md border border-white/[0.12] bg-white/[0.04]">
                     <input
@@ -319,15 +319,15 @@ export function EnergySimulator() {
                       value={monthlyBill}
                       min={1000}
                       onChange={(event) => setMonthlyBill(Number(event.target.value))}
-                      className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm font-semibold text-white outline-none"
+                      className="min-w-0 flex-1 bg-transparent px-2 py-1.5 text-xs font-semibold text-white outline-none"
                     />
-                    <span className="border-l border-white/[0.1] px-3 py-2 text-xs font-bold text-eliot-cyan">
+                    <span className="border-l border-white/[0.1] px-2 py-1.5 text-[10px] font-bold text-eliot-cyan">
                       MXN
                     </span>
                   </div>
                 </label>
 
-                <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                <label className="grid gap-1 text-[11px] text-white/[0.62]">
                   Costo por kWh
                   <div className="flex overflow-hidden rounded-md border border-white/[0.12] bg-white/[0.04]">
                     <input
@@ -336,20 +336,20 @@ export function EnergySimulator() {
                       min={0.5}
                       step={0.05}
                       onChange={(event) => setKwhCost(Number(event.target.value))}
-                      className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm font-semibold text-white outline-none"
+                      className="min-w-0 flex-1 bg-transparent px-2 py-1.5 text-xs font-semibold text-white outline-none"
                     />
-                    <span className="border-l border-white/[0.1] px-3 py-2 text-xs font-bold text-white/[0.72]">
+                    <span className="border-l border-white/[0.1] px-2 py-1.5 text-[10px] font-bold text-white/[0.72]">
                       kWh
                     </span>
                   </div>
                 </label>
 
-                <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                <label className="grid gap-1 text-[11px] text-white/[0.62]">
                   Tipo de sistema
                   <select
                     value={systemType}
                     onChange={(event) => setSystemType(event.target.value)}
-                    className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                    className="rounded-md border border-white/[0.12] bg-[#0c1928] px-2 py-1.5 text-xs font-semibold text-white outline-none"
                   >
                     <option>Interconectado</option>
                     <option>Hibrido</option>
@@ -359,52 +359,51 @@ export function EnergySimulator() {
               </div>
             </div>
 
-            <div className="pt-4">
-              <div className="flex items-start justify-between gap-3">
+            <div className="pt-3">
+              <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="text-xs font-black uppercase text-white">
+                  <p className="text-[11px] font-black uppercase text-white">
                     2. Configura el arreglo
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-white/[0.58]">
+                  <p className="mt-1 text-[10px] leading-4 text-white/[0.58]">
                     El panel seleccionado controla el modelo y los nuevos
                     modulos que agregues.
                   </p>
                 </div>
-                <LayoutGrid className="mt-0.5 h-4 w-4 shrink-0 text-eliot-cyan" />
+                <LayoutGrid className="mt-0.5 h-3.5 w-3.5 shrink-0 text-eliot-cyan" />
               </div>
 
               {selectedPanel ? (
-                <div className="mt-3 rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.055] p-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.1] text-eliot-cyan">
-                        <PanelTop className="h-5 w-5" />
+                <div className="mt-2 rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.055] p-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.1] text-eliot-cyan">
+                        <PanelTop className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-white">
-                          Panel seleccionado #{selectedPanel.id}
+                        <p className="truncate text-xs font-semibold text-white">
+                          Panel #{selectedPanel.id}
                         </p>
-                        <p className="mt-1 text-xs text-white/[0.58]">
-                          {getPanelTemplate(selectedPanel.templateId).watts}W |
-                          configuracion activa
+                        <p className="mt-0.5 text-[10px] text-white/[0.58]">
+                          {getPanelTemplate(selectedPanel.templateId).watts}W
                         </p>
                       </div>
                     </div>
                     <button
                       type="button"
                       onClick={removeSelectedPanel}
-                      className="rounded-md border border-white/[0.12] p-2 text-white/[0.72] transition hover:border-red-400/40 hover:text-red-300"
+                      className="rounded-md border border-white/[0.12] p-1.5 text-white/[0.72] transition hover:border-red-400/40 hover:text-red-300"
                       aria-label="Eliminar panel seleccionado"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="mt-2.5 grid grid-cols-2 gap-1.5">
                     <Button
                       type="button"
                       onClick={() => addPanel(selectedPanel.templateId)}
-                      className="h-10"
+                      className="h-8 text-xs"
                     >
                       Agregar panel
                     </Button>
@@ -412,25 +411,24 @@ export function EnergySimulator() {
                       type="button"
                       variant="outline"
                       onClick={() => addPanelRow(selectedPanel.templateId)}
-                      className="h-10"
+                      className="h-8 text-xs"
                     >
                       Agregar fila
                     </Button>
                   </div>
 
-                  <div className="mt-4 border-t border-white/[0.1] pt-4">
+                  <div className="mt-2 border-t border-white/[0.1] pt-2">
                     <div>
-                      <p className="text-sm font-semibold text-white">
+                      <p className="text-xs font-semibold text-white">
                         Ajustes del modulo
                       </p>
-                      <p className="mt-1 text-xs text-white/[0.58]">
-                        Cambia solo este panel y usa sus valores para los
-                        nuevos paneles.
+                      <p className="mt-0.5 text-[10px] text-white/[0.58]">
+                        Cambia este panel y usa sus valores para nuevos.
                       </p>
                     </div>
 
-                    <div className="mt-4 grid gap-3">
-                    <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                    <div className="mt-2 grid gap-2">
+                    <label className="grid gap-1 text-[11px] text-white/[0.62]">
                       Modelo
                       <select
                         value={selectedPanel.templateId}
@@ -442,7 +440,7 @@ export function EnergySimulator() {
                             watts: nextTemplate.watts,
                           });
                         }}
-                        className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                        className="rounded-md border border-white/[0.12] bg-[#0c1928] px-2 py-1 text-xs font-semibold text-white outline-none"
                       >
                         {panelTemplates.map((template) => (
                           <option key={template.id} value={template.id}>
@@ -452,7 +450,7 @@ export function EnergySimulator() {
                       </select>
                     </label>
 
-                    <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                    <label className="grid gap-1 text-[11px] text-white/[0.62]">
                       Orientacion
                       <select
                         value={selectedPanel.orientation}
@@ -461,7 +459,7 @@ export function EnergySimulator() {
                             orientation: event.target.value as OrientationId,
                           })
                         }
-                        className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                        className="rounded-md border border-white/[0.12] bg-[#0c1928] px-2 py-1 text-xs font-semibold text-white outline-none"
                       >
                         {Object.entries(orientations).map(([id, orientation]) => (
                           <option key={id} value={id}>
@@ -471,8 +469,8 @@ export function EnergySimulator() {
                       </select>
                     </label>
 
-                    <label className="grid gap-2 text-xs text-white/[0.62]">
-                      Inclinacion: {selectedPanel.tilt} grados
+                    <label className="grid gap-1 text-[11px] text-white/[0.62]">
+                      Inclinacion: {selectedPanel.tilt}°
                       <input
                         type="range"
                         min={5}
@@ -485,7 +483,7 @@ export function EnergySimulator() {
                       />
                     </label>
 
-                    <label className="grid gap-2 text-xs text-white/[0.62]">
+                    <label className="grid gap-1 text-[11px] text-white/[0.62]">
                       Perdidas: {selectedPanel.losses}%
                       <input
                         type="range"
@@ -502,22 +500,22 @@ export function EnergySimulator() {
                   </div>
                 </div>
               ) : (
-                <div className="mt-3 rounded-md border border-dashed border-eliot-cyan/[0.32] bg-eliot-cyan/[0.06] p-3">
-                  <p className="text-sm font-semibold text-white">
+                <div className="mt-2 rounded-md border border-dashed border-eliot-cyan/[0.32] bg-eliot-cyan/[0.06] p-2.5">
+                  <p className="text-xs font-semibold text-white">
                     No hay panel seleccionado
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-white/[0.62]">
+                  <p className="mt-1 text-[10px] leading-4 text-white/[0.62]">
                     Agrega un panel base para iniciar el arreglo.
                   </p>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    <Button type="button" onClick={() => addPanel()} className="h-10">
+                  <div className="mt-2 grid grid-cols-2 gap-1.5">
+                    <Button type="button" onClick={() => addPanel()} className="h-8 text-xs">
                       Agregar panel
                     </Button>
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => addPanelRow()}
-                      className="h-10"
+                      className="h-8 text-xs"
                     >
                       Agregar fila
                     </Button>
@@ -525,28 +523,28 @@ export function EnergySimulator() {
                 </div>
               )}
 
-              <div className="mt-3 overflow-hidden rounded-md border border-white/[0.08] bg-white/[0.025]">
+              <div className="mt-2 overflow-hidden rounded-md border border-white/[0.08] bg-white/[0.025]">
                 <button
                   type="button"
                   onClick={() => setQuickModelsOpen((isOpen) => !isOpen)}
                   aria-expanded={quickModelsOpen}
-                  className="flex w-full items-center justify-between gap-3 p-3 text-left transition hover:bg-white/[0.035]"
+                  className="flex w-full items-center justify-between gap-2 p-2 text-left transition hover:bg-white/[0.035]"
                 >
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/[0.72]">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/[0.72]">
                       Modelos rapidos
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-white/[0.5]">
+                    <p className="mt-0.5 text-[9px] leading-4 text-white/[0.5]">
                       Opcional: toca un icono o arrastralo al campo.
                     </p>
                   </div>
-                  <span className="flex items-center gap-2">
-                    <span className="rounded-full border border-white/[0.1] px-2 py-1 text-[10px] font-bold uppercase text-white/[0.48]">
-                      Opcional
+                  <span className="flex items-center gap-1.5 shrink-0">
+                    <span className="rounded-full border border-white/[0.1] px-1.5 py-0.5 text-[9px] font-bold uppercase text-white/[0.48]">
+                      Opt
                     </span>
                     <ChevronDown
                       className={cn(
-                        "h-4 w-4 text-eliot-cyan transition-transform",
+                        "h-3.5 w-3.5 text-eliot-cyan transition-transform",
                         quickModelsOpen && "rotate-180",
                       )}
                     />
@@ -554,7 +552,7 @@ export function EnergySimulator() {
                 </button>
 
                 {quickModelsOpen ? (
-                  <div className="grid grid-cols-3 gap-2 border-t border-white/[0.08] p-3">
+                  <div className="grid grid-cols-3 gap-1.5 border-t border-white/[0.08] p-2">
                     {panelTemplates.map((template) => (
                       <button
                         key={template.id}
@@ -563,20 +561,20 @@ export function EnergySimulator() {
                         onClick={() => selectTemplate(template.id)}
                         onDragStart={(event) => handleTemplateDrag(event, template.id)}
                         className={cn(
-                          "group rounded-md border p-2 text-center transition active:cursor-grabbing",
+                          "group rounded-md border p-1.5 text-center transition active:cursor-grabbing",
                           activeTemplateId === template.id
                             ? "border-eliot-cyan/[0.55] bg-eliot-cyan/[0.09]"
                             : "border-white/[0.1] bg-white/[0.03] hover:border-eliot-cyan/[0.35]",
                         )}
                         title={template.name}
                       >
-                        <span className="mx-auto flex h-9 w-12 items-center justify-center rounded border border-blue-300/[0.28] bg-[#09215e] text-eliot-cyan shadow-[0_0_16px_rgba(33,167,255,0.12)]">
-                          <PanelTop className="h-4 w-4" />
+                        <span className="mx-auto flex h-7 w-10 items-center justify-center rounded border border-blue-300/[0.28] bg-[#09215e] text-eliot-cyan shadow-[0_0_16px_rgba(33,167,255,0.12)]">
+                          <PanelTop className="h-3 w-3" />
                         </span>
-                        <span className="mt-2 block truncate text-[11px] font-semibold text-white">
+                        <span className="mt-1 block truncate text-[9px] font-semibold text-white">
                           {template.name.split(" ")[0]}
                         </span>
-                        <span className="text-[11px] font-black text-eliot-cyan">
+                        <span className="text-[9px] font-black text-eliot-cyan">
                           {template.watts}W
                         </span>
                       </button>
@@ -588,22 +586,22 @@ export function EnergySimulator() {
           </aside>
 
           <div className="on-dark overflow-hidden rounded-lg border border-white/[0.12] bg-[#07111c] text-white shadow-panel">
-            <div className="flex flex-col gap-3 border-b border-white/[0.1] p-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-2 border-b border-white/[0.1] p-3 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-xs font-black uppercase text-white">
+                <p className="text-[11px] font-black uppercase text-white">
                   Vista previa del sistema
                 </p>
-                <p className="mt-1 text-xs text-white/[0.58]">
-                  Campo fotovoltaico, bus DC e inversor conectados al calculo.
+                <p className="mt-0.5 text-[10px] text-white/[0.58]">
+                  Campo fotovoltaico, bus DC e inversor.
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setViewMode("2d")}
                   className={cn(
-                    "rounded-md border px-3 py-2 text-xs font-bold transition",
+                    "rounded-md border px-2 py-1 text-[10px] font-bold transition",
                     viewMode === "2d"
                       ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
                       : "border-white/[0.1] text-white/[0.68]",
@@ -615,7 +613,7 @@ export function EnergySimulator() {
                   type="button"
                   onClick={() => setViewMode("3d")}
                   className={cn(
-                    "rounded-md border px-3 py-2 text-xs font-bold transition",
+                    "rounded-md border px-2 py-1 text-[10px] font-bold transition",
                     viewMode === "3d"
                       ? "border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] text-eliot-cyan"
                       : "border-white/[0.1] text-white/[0.68]",
@@ -627,35 +625,35 @@ export function EnergySimulator() {
             </div>
 
             <div
-              className="relative min-h-[590px] overflow-hidden bg-[#081321]"
+              className="relative min-h-[420px] overflow-hidden bg-[#081321]"
               onDragOver={(event) => event.preventDefault()}
               onDrop={handleCanvasDrop}
             >
               <div className="absolute inset-0 bg-technical-grid opacity-55" />
-              <div className="absolute inset-x-6 top-6 z-10 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                <div className="rounded-md border border-eliot-cyan/[0.22] bg-eliot-ink/[0.72] px-4 py-3 backdrop-blur-xl">
-                  <p className="text-xs text-white/[0.58]">
-                    Produccion instantanea calculada
+              <div className="absolute inset-x-3 top-3 z-10 flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                <div className="rounded-md border border-eliot-cyan/[0.22] bg-eliot-ink/[0.72] px-3 py-2 backdrop-blur-xl">
+                  <p className="text-[10px] text-white/[0.58]">
+                    Produccion instantanea
                   </p>
-                  <p className="mt-1 text-3xl font-black text-eliot-cyan">
+                  <p className="mt-0.5 text-2xl font-black text-eliot-cyan">
                     {estimate.instantProduction.toFixed(2)} kW
                   </p>
                 </div>
-                <div className="rounded-md border border-white/[0.1] bg-eliot-ink/[0.6] px-4 py-3 text-right backdrop-blur-xl">
-                  <p className="text-xs text-white/[0.58]">Sistema</p>
-                  <p className="mt-1 text-sm font-semibold text-white">
-                    {systemType} | {activeTemplateData.watts}W base
+                <div className="rounded-md border border-white/[0.1] bg-eliot-ink/[0.6] px-3 py-2 text-right backdrop-blur-xl">
+                  <p className="text-[10px] text-white/[0.58]">Sistema</p>
+                  <p className="mt-0.5 text-xs font-semibold text-white">
+                    {systemType} | {activeTemplateData.watts}W
                   </p>
                 </div>
               </div>
 
-              <div className="absolute left-1/2 top-[44%] w-[min(780px,78vw)] -translate-x-1/2 -translate-y-1/2">
-                <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-white/[0.55]">
+              <div className="absolute left-1/2 top-[48%] w-[min(680px,90vw)] -translate-x-1/2 -translate-y-1/2">
+                <div className="mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.16em] text-white/[0.55]">
                   <span>Campo fotovoltaico</span>
                   <span>{panels.length} modulos</span>
                 </div>
                 <div
-                  className="relative rounded-lg border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.05] p-4 shadow-[0_0_48px_rgba(33,167,255,0.16)]"
+                  className="relative rounded-lg border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.05] p-3 shadow-[0_0_48px_rgba(33,167,255,0.16)]"
                   style={{
                     transform:
                       viewMode === "3d"
@@ -664,8 +662,8 @@ export function EnergySimulator() {
                     transformOrigin: "center",
                   }}
                 >
-                  <div className="pointer-events-none absolute inset-4 rounded-md border border-dashed border-eliot-cyan/[0.18]" />
-                  <div className="grid grid-cols-7 gap-2">
+                  <div className="pointer-events-none absolute inset-3 rounded-md border border-dashed border-eliot-cyan/[0.18]" />
+                  <div className="grid grid-cols-7 gap-1.5">
                     {panels.map((panel) => {
                       const template = getPanelTemplate(panel.templateId);
                       const isSelected = selectedPanel?.id === panel.id;
@@ -680,7 +678,7 @@ export function EnergySimulator() {
                           onDragOver={(event) => event.preventDefault()}
                           onDrop={(event) => handlePanelDrop(event, panel.id)}
                           className={cn(
-                            "group relative h-14 overflow-hidden rounded-[4px] border transition hover:-translate-y-0.5",
+                            "group relative h-11 overflow-hidden rounded-[4px] border transition hover:-translate-y-0.5",
                             isSelected
                               ? "border-eliot-cyan shadow-[0_0_28px_rgba(107,233,255,0.58)]"
                               : "border-blue-300/[0.38] shadow-[0_0_16px_rgba(33,167,255,0.14)]",
@@ -693,7 +691,7 @@ export function EnergySimulator() {
                           }}
                           title={`${template.name} | ${panel.watts}W`}
                         >
-                          <span className="absolute inset-x-2 top-1 h-px bg-white/[0.26]" />
+                          <span className="absolute inset-x-1.5 top-0.5 h-px bg-white/[0.26]" />
                           <span className="sr-only">
                             Configurar panel {panel.id}
                           </span>
@@ -704,27 +702,27 @@ export function EnergySimulator() {
                 </div>
               </div>
 
-              <div className="absolute bottom-[128px] left-[16%] hidden h-px w-[48%] bg-gradient-to-r from-eliot-cyan via-eliot-cyan/[0.55] to-transparent md:block" />
-              <div className="absolute bottom-[128px] left-[16%] hidden h-[76px] w-px bg-eliot-cyan/[0.65] md:block" />
-              <div className="absolute bottom-[190px] left-[64%] hidden rounded-full border border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] px-3 py-1 text-xs font-semibold text-eliot-cyan md:block">
+              <div className="absolute bottom-[100px] left-[16%] hidden h-px w-[48%] bg-gradient-to-r from-eliot-cyan via-eliot-cyan/[0.55] to-transparent md:block" />
+              <div className="absolute bottom-[100px] left-[16%] hidden h-[60px] w-px bg-eliot-cyan/[0.65] md:block" />
+              <div className="absolute bottom-[155px] left-[64%] hidden rounded-full border border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] px-2 py-0.5 text-[10px] font-semibold text-eliot-cyan md:block">
                 Bus DC
               </div>
 
-              <div className="absolute bottom-8 left-8 w-[min(360px,calc(100%-4rem))] rounded-lg border border-eliot-cyan/[0.26] bg-[#0b1320] p-4 shadow-glow">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-md border border-eliot-cyan/[0.26] bg-eliot-cyan/[0.08] text-eliot-cyan">
-                    <Cpu className="h-5 w-5" />
+              <div className="absolute bottom-6 left-6 w-[min(340px,calc(100%-3rem))] rounded-lg border border-eliot-cyan/[0.26] bg-[#0b1320] p-3 shadow-glow">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-md border border-eliot-cyan/[0.26] bg-eliot-cyan/[0.08] text-eliot-cyan shrink-0">
+                    <Cpu className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-sm font-black uppercase text-white">
+                    <p className="text-xs font-black uppercase text-white">
                       Inversor
                     </p>
-                    <p className="text-xs text-white/[0.58]">
-                      Convierte la potencia DC del arreglo a salida AC.
+                    <p className="text-[10px] text-white/[0.58]">
+                      Convierte DC a AC.
                     </p>
                   </div>
                 </div>
-                <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="mt-2 grid grid-cols-3 gap-1.5">
                   <InverterStat label="AC" value={`${estimate.acKw.toFixed(2)} kW`} />
                   <InverterStat label="Unid." value={String(estimate.inverterCount)} />
                   <InverterStat label="Tipo" value={systemType} />
@@ -733,9 +731,9 @@ export function EnergySimulator() {
 
               {panels.length === 0 && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center">
-                  <div className="rounded-lg border border-dashed border-eliot-cyan/[0.45] bg-eliot-cyan/[0.08] p-6 text-center">
-                    <Move className="mx-auto h-8 w-8 text-eliot-cyan" />
-                    <p className="mt-3 text-sm font-semibold text-white">
+                  <div className="rounded-lg border border-dashed border-eliot-cyan/[0.45] bg-eliot-cyan/[0.08] p-4 text-center">
+                    <Move className="mx-auto h-6 w-6 text-eliot-cyan" />
+                    <p className="mt-2 text-xs font-semibold text-white">
                       Arrastra un panel aqui
                     </p>
                   </div>
@@ -743,7 +741,7 @@ export function EnergySimulator() {
               )}
             </div>
 
-            <div className="grid gap-px bg-white/[0.08] sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-px bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-4">
               {kpis.map((kpi) => (
                 <KpiTile key={kpi.label} {...kpi} />
               ))}
@@ -751,20 +749,18 @@ export function EnergySimulator() {
           </div>
         </div>
 
-        <div className="mt-5 flex flex-col gap-3 rounded-lg border border-white/[0.1] bg-white/[0.035] p-4 md:flex-row md:items-center md:justify-between">
+        <div className="mt-4 flex flex-col gap-2 rounded-lg border border-white/[0.1] bg-white/[0.035] p-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-white">
-              Resultado preliminar: {formatCurrency(estimate.investment)} de
-              inversion estimada.
+            <p className="text-xs font-semibold text-white">
+              Resultado preliminar: {formatCurrency(estimate.investment)}
             </p>
-            <p className="mt-1 text-sm text-white/[0.62]">
-              El calculo cambia con cada panel y se confirma con visita tecnica,
-              levantamiento de sitio y recibos reales.
+            <p className="mt-0.5 text-xs text-white/[0.62]">
+              Se confirma con visita tecnica, levantamiento de sitio y recibos reales.
             </p>
           </div>
-          <Button asChild className="shrink-0">
+          <Button asChild className="shrink-0 h-9">
             <a href="/contacto">
-              Solicitar propuesta <ArrowRight className="h-4 w-4" />
+              Solicitar propuesta <ArrowRight className="h-3 w-3 ml-1" />
             </a>
           </Button>
         </div>
@@ -785,15 +781,15 @@ function KpiTile({
   detail: string;
 }) {
   return (
-    <div className="bg-[#07111c] p-4">
-      <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan">
-          <Icon className="h-4 w-4" />
+    <div className="bg-[#07111c] p-2.5">
+      <div className="flex items-center gap-2">
+        <span className="flex h-8 w-8 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan shrink-0">
+          <Icon className="h-3.5 w-3.5" />
         </span>
         <div className="min-w-0">
-          <p className="text-base font-black text-white">{value}</p>
-          <p className="text-xs font-semibold text-white/[0.68]">{label}</p>
-          <p className="mt-0.5 truncate text-xs text-white/[0.45]">{detail}</p>
+          <p className="text-sm font-black text-white">{value}</p>
+          <p className="text-[10px] font-semibold text-white/[0.68]">{label}</p>
+          <p className="mt-0.5 truncate text-[10px] text-white/[0.45]">{detail}</p>
         </div>
       </div>
     </div>
@@ -802,9 +798,9 @@ function KpiTile({
 
 function InverterStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-white/[0.1] bg-white/[0.04] p-2">
-      <p className="text-[10px] uppercase text-white/[0.46]">{label}</p>
-      <p className="mt-1 truncate text-xs font-black text-white">{value}</p>
+    <div className="rounded-md border border-white/[0.1] bg-white/[0.04] p-1.5">
+      <p className="text-[9px] uppercase text-white/[0.46]">{label}</p>
+      <p className="mt-0.5 truncate text-[11px] font-black text-white">{value}</p>
     </div>
   );
 }
