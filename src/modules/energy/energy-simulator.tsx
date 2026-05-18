@@ -7,6 +7,7 @@ import {
   Gauge,
   LayoutGrid,
   Move,
+  PanelTop,
   Trash2,
   Zap,
 } from "lucide-react";
@@ -109,7 +110,8 @@ export function EnergySimulator() {
 
   const selectedPanel =
     panels.find((panel) => panel.id === selectedPanelId) ?? panels[0] ?? null;
-  const selectedTemplateData = getPanelTemplate(selectedTemplate);
+  const activeTemplateId = selectedPanel?.templateId ?? selectedTemplate;
+  const activeTemplateData = getPanelTemplate(activeTemplateId);
 
   const estimate = useMemo(() => {
     const sunHours = 5.25;
@@ -188,16 +190,16 @@ export function EnergySimulator() {
     },
   ];
 
-  function addPanel(templateId = selectedTemplate) {
+  function addPanel(templateId = activeTemplateId) {
     const nextId = panels.reduce((max, panel) => Math.max(max, panel.id), 0) + 1;
     setPanels([...panels, buildSolarPanel(nextId, templateId)]);
     setSelectedPanelId(nextId);
   }
 
-  function addPanelRow() {
+  function addPanelRow(templateId = activeTemplateId) {
     const maxId = panels.reduce((max, panel) => Math.max(max, panel.id), 0);
     const newPanels = Array.from({ length: 8 }, (_, index) =>
-      buildSolarPanel(maxId + index + 1, selectedTemplate),
+      buildSolarPanel(maxId + index + 1, templateId),
     );
     setPanels([...panels, ...newPanels]);
     setSelectedPanelId(maxId + 1);
@@ -219,6 +221,18 @@ export function EnergySimulator() {
         panel.id === selectedPanel.id ? { ...panel, ...update } : panel,
       ),
     );
+  }
+
+  function selectTemplate(templateId: string) {
+    const nextTemplate = getPanelTemplate(templateId);
+    setSelectedTemplate(templateId);
+
+    if (selectedPanel) {
+      updateSelectedPanel({
+        templateId: nextTemplate.id,
+        watts: nextTemplate.watts,
+      });
+    }
   }
 
   function handleTemplateDrag(event: React.DragEvent<HTMLButtonElement>, templateId: string) {
@@ -347,69 +361,32 @@ export function EnergySimulator() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-black uppercase text-white">
-                    2. Diseno del arreglo
+                    2. Configura el arreglo
                   </p>
                   <p className="mt-1 text-xs leading-5 text-white/[0.58]">
-                    Arrastra un modelo al campo o agrega filas completas.
+                    El panel seleccionado controla el modelo y los nuevos
+                    modulos que agregues.
                   </p>
                 </div>
-                <Move className="mt-0.5 h-4 w-4 shrink-0 text-eliot-cyan" />
-              </div>
-
-              <div className="mt-3 grid gap-2">
-                {panelTemplates.map((template) => (
-                  <button
-                    key={template.id}
-                    type="button"
-                    draggable
-                    onClick={() => setSelectedTemplate(template.id)}
-                    onDragStart={(event) => handleTemplateDrag(event, template.id)}
-                    className={cn(
-                      "flex cursor-grab items-center justify-between rounded-md border p-3 text-left transition active:cursor-grabbing",
-                      selectedTemplate === template.id
-                        ? "border-eliot-cyan/[0.55] bg-eliot-cyan/[0.1]"
-                        : "border-white/[0.1] bg-white/[0.035] hover:border-eliot-cyan/[0.35]",
-                    )}
-                  >
-                    <span>
-                      <span className="block text-sm font-semibold text-white">
-                        {template.name}
-                      </span>
-                      <span className="mt-1 block text-xs text-white/[0.58]">
-                        {template.efficiency}% eficiencia | {template.area.toFixed(2)} m2
-                      </span>
-                    </span>
-                    <span className="text-sm font-black text-eliot-cyan">
-                      {template.watts}W
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                <Button type="button" onClick={() => addPanel()} className="h-10">
-                  Agregar 1
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addPanelRow}
-                  className="h-10"
-                >
-                  Agregar fila
-                </Button>
+                <LayoutGrid className="mt-0.5 h-4 w-4 shrink-0 text-eliot-cyan" />
               </div>
 
               {selectedPanel ? (
-                <div className="mt-4 rounded-md border border-white/[0.1] bg-white/[0.035] p-3">
+                <div className="mt-3 rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.055] p-3">
                   <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-white">
-                        Panel seleccionado #{selectedPanel.id}
-                      </p>
-                      <p className="mt-1 text-xs text-white/[0.58]">
-                        Configuracion individual del modulo activo.
-                      </p>
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.1] text-eliot-cyan">
+                        <PanelTop className="h-5 w-5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-white">
+                          Panel seleccionado #{selectedPanel.id}
+                        </p>
+                        <p className="mt-1 text-xs text-white/[0.58]">
+                          {getPanelTemplate(selectedPanel.templateId).watts}W |
+                          configuracion activa
+                        </p>
+                      </div>
                     </div>
                     <button
                       type="button"
@@ -421,13 +398,43 @@ export function EnergySimulator() {
                     </button>
                   </div>
 
-                  <div className="mt-4 grid gap-3">
+                  <div className="mt-4 grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      onClick={() => addPanel(selectedPanel.templateId)}
+                      className="h-10"
+                    >
+                      Agregar panel
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => addPanelRow(selectedPanel.templateId)}
+                      className="h-10"
+                    >
+                      Agregar fila
+                    </Button>
+                  </div>
+
+                  <div className="mt-4 border-t border-white/[0.1] pt-4">
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        Ajustes del modulo
+                      </p>
+                      <p className="mt-1 text-xs text-white/[0.58]">
+                        Cambia solo este panel y usa sus valores para los
+                        nuevos paneles.
+                      </p>
+                    </div>
+
+                    <div className="mt-4 grid gap-3">
                     <label className="grid gap-1.5 text-xs text-white/[0.62]">
                       Modelo
                       <select
                         value={selectedPanel.templateId}
                         onChange={(event) => {
                           const nextTemplate = getPanelTemplate(event.target.value);
+                          setSelectedTemplate(nextTemplate.id);
                           updateSelectedPanel({
                             templateId: nextTemplate.id,
                             watts: nextTemplate.watts,
@@ -489,13 +496,77 @@ export function EnergySimulator() {
                         className="w-full accent-eliot-electric"
                       />
                     </label>
+                    </div>
                   </div>
                 </div>
               ) : (
-                <p className="mt-4 rounded-md border border-dashed border-eliot-cyan/[0.32] bg-eliot-cyan/[0.06] p-3 text-sm text-white/[0.7]">
-                  Arrastra un panel al campo para activar su configuracion.
-                </p>
+                <div className="mt-3 rounded-md border border-dashed border-eliot-cyan/[0.32] bg-eliot-cyan/[0.06] p-3">
+                  <p className="text-sm font-semibold text-white">
+                    No hay panel seleccionado
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-white/[0.62]">
+                    Agrega un panel base para iniciar el arreglo.
+                  </p>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <Button type="button" onClick={() => addPanel()} className="h-10">
+                      Agregar panel
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => addPanelRow()}
+                      className="h-10"
+                    >
+                      Agregar fila
+                    </Button>
+                  </div>
+                </div>
               )}
+
+              <div className="mt-3 rounded-md border border-white/[0.08] bg-white/[0.025] p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/[0.72]">
+                      Modelos rapidos
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-white/[0.5]">
+                      Opcional: toca un icono o arrastralo al campo.
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-white/[0.1] px-2 py-1 text-[10px] font-bold uppercase text-white/[0.48]">
+                    Opcional
+                  </span>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {panelTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      type="button"
+                      draggable
+                      onClick={() => selectTemplate(template.id)}
+                      onDragStart={(event) => handleTemplateDrag(event, template.id)}
+                      className={cn(
+                        "group rounded-md border p-2 text-center transition active:cursor-grabbing",
+                        activeTemplateId === template.id
+                          ? "border-eliot-cyan/[0.55] bg-eliot-cyan/[0.09]"
+                          : "border-white/[0.1] bg-white/[0.03] hover:border-eliot-cyan/[0.35]",
+                      )}
+                      title={template.name}
+                    >
+                      <span className="mx-auto flex h-9 w-12 items-center justify-center rounded border border-blue-300/[0.28] bg-[#09215e] text-eliot-cyan shadow-[0_0_16px_rgba(33,167,255,0.12)]">
+                        <PanelTop className="h-4 w-4" />
+                      </span>
+                      <span className="mt-2 block truncate text-[11px] font-semibold text-white">
+                        {template.name.split(" ")[0]}
+                      </span>
+                      <span className="text-[11px] font-black text-eliot-cyan">
+                        {template.watts}W
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </aside>
 
@@ -556,7 +627,7 @@ export function EnergySimulator() {
                 <div className="rounded-md border border-white/[0.1] bg-eliot-ink/[0.6] px-4 py-3 text-right backdrop-blur-xl">
                   <p className="text-xs text-white/[0.58]">Sistema</p>
                   <p className="mt-1 text-sm font-semibold text-white">
-                    {systemType} | {selectedTemplateData.watts}W base
+                    {systemType} | {activeTemplateData.watts}W base
                   </p>
                 </div>
               </div>
