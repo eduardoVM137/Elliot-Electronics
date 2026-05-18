@@ -3,11 +3,10 @@
 import { useMemo, useState } from "react";
 import {
   ArrowRight,
-  Boxes,
   Cpu,
+  Gauge,
   LayoutGrid,
   Move,
-  RotateCw,
   Trash2,
   Zap,
 } from "lucide-react";
@@ -62,17 +61,14 @@ const panelTemplates: PanelTemplate[] = [
   },
 ];
 
-const orientations: Record<
-  OrientationId,
-  { label: string; factor: number }
-> = {
+const orientations: Record<OrientationId, { label: string; factor: number }> = {
   sur: { label: "Sur (180)", factor: 1 },
   sureste: { label: "Sureste (135)", factor: 0.94 },
   suroeste: { label: "Suroeste (225)", factor: 0.92 },
   "este-oeste": { label: "Este / Oeste", factor: 0.87 },
 };
 
-const seedPanels: SolarPanel[] = Array.from({ length: 32 }, (_, index) => ({
+const seedPanels: SolarPanel[] = Array.from({ length: 28 }, (_, index) => ({
   id: index + 1,
   templateId: "trina-550",
   watts: 550,
@@ -113,19 +109,21 @@ export function EnergySimulator() {
 
   const selectedPanel =
     panels.find((panel) => panel.id === selectedPanelId) ?? panels[0] ?? null;
+  const selectedTemplateData = getPanelTemplate(selectedTemplate);
 
   const estimate = useMemo(() => {
     const sunHours = 5.25;
     const monthlyConsumption = monthlyBill / Math.max(kwhCost, 0.1);
 
-    const production = panels.reduce((total, panel) => {
+    const annualProduction = panels.reduce((total, panel) => {
       const orientation = orientations[panel.orientation].factor;
       const tiltFactor = clamp(1 - Math.abs(panel.tilt - 18) * 0.004, 0.9, 1);
       const lossFactor = 1 - panel.losses / 100;
       return total + (panel.watts / 1000) * sunHours * 365 * orientation * tiltFactor * lossFactor;
     }, 0);
 
-    const totalDcKw = panels.reduce((total, panel) => total + panel.watts, 0) / 1000;
+    const dcKw = panels.reduce((total, panel) => total + panel.watts, 0) / 1000;
+    const acKw = dcKw * 0.96;
     const totalArea = panels.reduce(
       (total, panel) => total + getPanelTemplate(panel.templateId).area,
       0,
@@ -134,25 +132,24 @@ export function EnergySimulator() {
       ? panels.reduce((total, panel) => total + panel.losses, 0) / panels.length
       : 0;
     const annualConsumption = monthlyConsumption * 12;
-    const usefulProduction = Math.min(production, annualConsumption * 0.95);
+    const usefulProduction = Math.min(annualProduction, annualConsumption * 0.95);
     const annualSavings = usefulProduction * kwhCost;
     const hardwareCost = panels.reduce(
       (total, panel) => total + getPanelTemplate(panel.templateId).cost,
       0,
     );
-    const balanceOfSystem = totalDcKw * 6400 + 68000;
-    const investment = panels.length ? hardwareCost + balanceOfSystem : 0;
+    const investment = panels.length ? hardwareCost + dcKw * 6400 + 68000 : 0;
     const roi = annualSavings > 0 ? investment / annualSavings : 0;
-    const inverterCount = panels.length ? Math.max(1, Math.ceil(totalDcKw / 50)) : 0;
-    const instantProduction = totalDcKw * 0.73 * (1 - avgLosses / 100);
+    const inverterCount = panels.length ? Math.max(1, Math.ceil(dcKw / 50)) : 0;
+    const instantProduction = dcKw * 0.73 * (1 - avgLosses / 100);
     const offset = annualConsumption > 0 ? usefulProduction / annualConsumption : 0;
 
     return {
+      acKw,
+      annualProduction,
       annualSavings,
-      annualProduction: production,
       avgLosses,
-      dcKw: totalDcKw,
-      acKw: totalDcKw * 0.96,
+      dcKw,
       instantProduction,
       investment,
       inverterCount,
@@ -162,7 +159,34 @@ export function EnergySimulator() {
     };
   }, [kwhCost, monthlyBill, panels]);
 
-  const selectedTemplateData = getPanelTemplate(selectedTemplate);
+  const kpis = [
+    {
+      icon: LayoutGrid,
+      label: "Paneles",
+      value: panels.length.toString(),
+      detail: `${estimate.totalArea.toFixed(0)} m2 requeridos`,
+    },
+    {
+      icon: Zap,
+      label: "Potencia DC",
+      value: `${estimate.dcKw.toFixed(2)} kWp`,
+      detail: `${estimate.acKw.toFixed(2)} kW AC estimados`,
+    },
+    {
+      icon: Gauge,
+      label: "Produccion anual",
+      value: `${estimate.annualProduction.toLocaleString("es-MX", {
+        maximumFractionDigits: 0,
+      })} kWh`,
+      detail: `${Math.round(estimate.offset * 100)}% de cobertura`,
+    },
+    {
+      icon: Cpu,
+      label: "Ahorro anual",
+      value: formatCurrency(estimate.annualSavings),
+      detail: `Retorno ${estimate.roi.toFixed(1)} anos`,
+    },
+  ];
 
   function addPanel(templateId = selectedTemplate) {
     const nextId = panels.reduce((max, panel) => Math.max(max, panel.id), 0) + 1;
@@ -254,13 +278,13 @@ export function EnergySimulator() {
               Disena el arreglo y mira el impacto al instante.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-white/[0.68] md:text-base">
-              Arrastra paneles al campo, selecciona cualquiera para ajustar su
-              configuracion y compara potencia, area, ahorro e inversion.
+              Arrastra paneles al campo, selecciona uno y ajusta su modelo,
+              orientacion, inclinacion y perdidas desde el mismo bloque.
             </p>
           </div>
 
           <div className="rounded-full border border-eliot-cyan/[0.28] bg-eliot-cyan/[0.08] px-4 py-2 text-sm font-semibold text-eliot-cyan">
-            {panels.length} paneles configurados
+            {panels.length} paneles activos
           </div>
         </div>
 
@@ -319,10 +343,19 @@ export function EnergySimulator() {
               </div>
             </div>
 
-            <div className="border-b border-white/[0.1] py-4">
-              <p className="text-xs font-black uppercase text-white">
-                2. Arrastra paneles
-              </p>
+            <div className="pt-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase text-white">
+                    2. Diseno del arreglo
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-white/[0.58]">
+                    Arrastra un modelo al campo o agrega filas completas.
+                  </p>
+                </div>
+                <Move className="mt-0.5 h-4 w-4 shrink-0 text-eliot-cyan" />
+              </div>
+
               <div className="mt-3 grid gap-2">
                 {panelTemplates.map((template) => (
                   <button
@@ -366,22 +399,16 @@ export function EnergySimulator() {
                   Agregar fila
                 </Button>
               </div>
-            </div>
-
-            <div className="pt-4">
-              <p className="text-xs font-black uppercase text-white">
-                3. Configuracion del panel
-              </p>
 
               {selectedPanel ? (
-                <div className="mt-4 grid gap-3">
-                  <div className="flex items-center justify-between rounded-md border border-white/[0.1] bg-white/[0.035] p-3">
+                <div className="mt-4 rounded-md border border-white/[0.1] bg-white/[0.035] p-3">
+                  <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-semibold text-white">
-                        Panel #{selectedPanel.id}
+                        Panel seleccionado #{selectedPanel.id}
                       </p>
                       <p className="mt-1 text-xs text-white/[0.58]">
-                        Edita este modulo sin afectar los demas.
+                        Configuracion individual del modulo activo.
                       </p>
                     </div>
                     <button
@@ -394,77 +421,79 @@ export function EnergySimulator() {
                     </button>
                   </div>
 
-                  <label className="grid gap-1.5 text-xs text-white/[0.62]">
-                    Modelo
-                    <select
-                      value={selectedPanel.templateId}
-                      onChange={(event) => {
-                        const nextTemplate = getPanelTemplate(event.target.value);
-                        updateSelectedPanel({
-                          templateId: nextTemplate.id,
-                          watts: nextTemplate.watts,
-                        });
-                      }}
-                      className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
-                    >
-                      {panelTemplates.map((template) => (
-                        <option key={template.id} value={template.id}>
-                          {template.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  <div className="mt-4 grid gap-3">
+                    <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                      Modelo
+                      <select
+                        value={selectedPanel.templateId}
+                        onChange={(event) => {
+                          const nextTemplate = getPanelTemplate(event.target.value);
+                          updateSelectedPanel({
+                            templateId: nextTemplate.id,
+                            watts: nextTemplate.watts,
+                          });
+                        }}
+                        className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                      >
+                        {panelTemplates.map((template) => (
+                          <option key={template.id} value={template.id}>
+                            {template.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
 
-                  <label className="grid gap-1.5 text-xs text-white/[0.62]">
-                    Orientacion
-                    <select
-                      value={selectedPanel.orientation}
-                      onChange={(event) =>
-                        updateSelectedPanel({
-                          orientation: event.target.value as OrientationId,
-                        })
-                      }
-                      className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
-                    >
-                      {Object.entries(orientations).map(([id, orientation]) => (
-                        <option key={id} value={id}>
-                          {orientation.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                    <label className="grid gap-1.5 text-xs text-white/[0.62]">
+                      Orientacion
+                      <select
+                        value={selectedPanel.orientation}
+                        onChange={(event) =>
+                          updateSelectedPanel({
+                            orientation: event.target.value as OrientationId,
+                          })
+                        }
+                        className="rounded-md border border-white/[0.12] bg-[#0c1928] px-3 py-2 text-sm font-semibold text-white outline-none"
+                      >
+                        {Object.entries(orientations).map(([id, orientation]) => (
+                          <option key={id} value={id}>
+                            {orientation.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
 
-                  <label className="grid gap-2 text-xs text-white/[0.62]">
-                    Inclinacion: {selectedPanel.tilt} grados
-                    <input
-                      type="range"
-                      min={5}
-                      max={30}
-                      value={selectedPanel.tilt}
-                      onChange={(event) =>
-                        updateSelectedPanel({ tilt: Number(event.target.value) })
-                      }
-                      className="w-full accent-eliot-electric"
-                    />
-                  </label>
+                    <label className="grid gap-2 text-xs text-white/[0.62]">
+                      Inclinacion: {selectedPanel.tilt} grados
+                      <input
+                        type="range"
+                        min={5}
+                        max={30}
+                        value={selectedPanel.tilt}
+                        onChange={(event) =>
+                          updateSelectedPanel({ tilt: Number(event.target.value) })
+                        }
+                        className="w-full accent-eliot-electric"
+                      />
+                    </label>
 
-                  <label className="grid gap-2 text-xs text-white/[0.62]">
-                    Perdidas estimadas: {selectedPanel.losses}%
-                    <input
-                      type="range"
-                      min={4}
-                      max={18}
-                      value={selectedPanel.losses}
-                      onChange={(event) =>
-                        updateSelectedPanel({ losses: Number(event.target.value) })
-                      }
-                      className="w-full accent-eliot-electric"
-                    />
-                  </label>
+                    <label className="grid gap-2 text-xs text-white/[0.62]">
+                      Perdidas: {selectedPanel.losses}%
+                      <input
+                        type="range"
+                        min={4}
+                        max={18}
+                        value={selectedPanel.losses}
+                        onChange={(event) =>
+                          updateSelectedPanel({ losses: Number(event.target.value) })
+                        }
+                        className="w-full accent-eliot-electric"
+                      />
+                    </label>
+                  </div>
                 </div>
               ) : (
-                <p className="mt-4 rounded-md border border-white/[0.1] bg-white/[0.035] p-3 text-sm text-white/[0.64]">
-                  Arrastra un panel a la vista previa para comenzar.
+                <p className="mt-4 rounded-md border border-dashed border-eliot-cyan/[0.32] bg-eliot-cyan/[0.06] p-3 text-sm text-white/[0.7]">
+                  Arrastra un panel al campo para activar su configuracion.
                 </p>
               )}
             </div>
@@ -477,7 +506,7 @@ export function EnergySimulator() {
                   Vista previa del sistema
                 </p>
                 <p className="mt-1 text-xs text-white/[0.58]">
-                  Suelta paneles en el campo. Selecciona un modulo para configurarlo.
+                  Campo fotovoltaico, bus DC e inversor conectados al calculo.
                 </p>
               </div>
 
@@ -510,90 +539,112 @@ export function EnergySimulator() {
             </div>
 
             <div
-              className="relative min-h-[560px] overflow-hidden bg-[#081321]"
+              className="relative min-h-[590px] overflow-hidden bg-[#081321]"
               onDragOver={(event) => event.preventDefault()}
               onDrop={handleCanvasDrop}
             >
               <div className="absolute inset-0 bg-technical-grid opacity-55" />
-              <div className="absolute left-12 top-16 rounded-md border border-eliot-cyan/[0.22] bg-eliot-ink/[0.72] p-4 backdrop-blur-xl">
-                <p className="text-xs text-white/[0.58]">Produccion instantanea</p>
-                <p className="mt-2 text-3xl font-black text-eliot-cyan">
-                  {estimate.instantProduction.toFixed(2)} kW
-                </p>
-                <div className="mt-3 flex h-8 items-end gap-1">
-                  {[0.42, 0.56, 0.48, 0.72, 0.64, 0.88, 0.76, 0.92].map(
-                    (height, index) => (
-                      <span
-                        key={index}
-                        className="w-2 rounded-full bg-eliot-cyan/[0.72]"
-                        style={{ height: `${height * 100}%` }}
-                      />
-                    ),
-                  )}
+              <div className="absolute inset-x-6 top-6 z-10 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div className="rounded-md border border-eliot-cyan/[0.22] bg-eliot-ink/[0.72] px-4 py-3 backdrop-blur-xl">
+                  <p className="text-xs text-white/[0.58]">
+                    Produccion instantanea calculada
+                  </p>
+                  <p className="mt-1 text-3xl font-black text-eliot-cyan">
+                    {estimate.instantProduction.toFixed(2)} kW
+                  </p>
+                </div>
+                <div className="rounded-md border border-white/[0.1] bg-eliot-ink/[0.6] px-4 py-3 text-right backdrop-blur-xl">
+                  <p className="text-xs text-white/[0.58]">Sistema</p>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {systemType} | {selectedTemplateData.watts}W base
+                  </p>
                 </div>
               </div>
 
-              <div className="absolute bottom-20 left-10 hidden w-52 rounded-md border border-eliot-cyan/[0.26] bg-[#0b1320] p-4 shadow-glow md:block">
-                <div className="flex items-center justify-between border-b border-white/[0.1] pb-3">
-                  <span className="text-xs font-semibold text-eliot-cyan">
-                    INVERSOR
+              <div className="absolute left-1/2 top-[44%] w-[min(780px,78vw)] -translate-x-1/2 -translate-y-1/2">
+                <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-white/[0.55]">
+                  <span>Campo fotovoltaico</span>
+                  <span>{panels.length} modulos</span>
+                </div>
+                <div
+                  className="relative rounded-lg border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.05] p-4 shadow-[0_0_48px_rgba(33,167,255,0.16)]"
+                  style={{
+                    transform:
+                      viewMode === "3d"
+                        ? "perspective(1050px) rotateX(56deg) rotateZ(-14deg)"
+                        : "none",
+                    transformOrigin: "center",
+                  }}
+                >
+                  <div className="pointer-events-none absolute inset-4 rounded-md border border-dashed border-eliot-cyan/[0.18]" />
+                  <div className="grid grid-cols-7 gap-2">
+                    {panels.map((panel) => {
+                      const template = getPanelTemplate(panel.templateId);
+                      const isSelected = selectedPanel?.id === panel.id;
+
+                      return (
+                        <button
+                          key={panel.id}
+                          type="button"
+                          draggable
+                          onClick={() => setSelectedPanelId(panel.id)}
+                          onDragStart={(event) => handlePanelDrag(event, panel.id)}
+                          onDragOver={(event) => event.preventDefault()}
+                          onDrop={(event) => handlePanelDrop(event, panel.id)}
+                          className={cn(
+                            "group relative h-14 overflow-hidden rounded-[4px] border transition hover:-translate-y-0.5",
+                            isSelected
+                              ? "border-eliot-cyan shadow-[0_0_28px_rgba(107,233,255,0.58)]"
+                              : "border-blue-300/[0.38] shadow-[0_0_16px_rgba(33,167,255,0.14)]",
+                          )}
+                          style={{
+                            backgroundColor: "#09215e",
+                            backgroundImage:
+                              "linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(135deg, rgba(33,167,255,0.34), rgba(3,12,38,0.1))",
+                            backgroundSize: "18px 100%, 100% 12px, 100% 100%",
+                          }}
+                          title={`${template.name} | ${panel.watts}W`}
+                        >
+                          <span className="absolute inset-x-2 top-1 h-px bg-white/[0.26]" />
+                          <span className="sr-only">
+                            Configurar panel {panel.id}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-[128px] left-[16%] hidden h-px w-[48%] bg-gradient-to-r from-eliot-cyan via-eliot-cyan/[0.55] to-transparent md:block" />
+              <div className="absolute bottom-[128px] left-[16%] hidden h-[76px] w-px bg-eliot-cyan/[0.65] md:block" />
+              <div className="absolute bottom-[190px] left-[64%] hidden rounded-full border border-eliot-cyan/[0.45] bg-eliot-cyan/[0.12] px-3 py-1 text-xs font-semibold text-eliot-cyan md:block">
+                Bus DC
+              </div>
+
+              <div className="absolute bottom-8 left-8 w-[min(360px,calc(100%-4rem))] rounded-lg border border-eliot-cyan/[0.26] bg-[#0b1320] p-4 shadow-glow">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-md border border-eliot-cyan/[0.26] bg-eliot-cyan/[0.08] text-eliot-cyan">
+                    <Cpu className="h-5 w-5" />
                   </span>
-                  <span className="text-xs text-white/[0.58]">{systemType}</span>
+                  <div>
+                    <p className="text-sm font-black uppercase text-white">
+                      Inversor
+                    </p>
+                    <p className="text-xs text-white/[0.58]">
+                      Convierte la potencia DC del arreglo a salida AC.
+                    </p>
+                  </div>
                 </div>
-                <div className="mt-4 h-12 rounded bg-black/[0.28]" />
-                <p className="mt-3 text-sm font-semibold text-white">
-                  {estimate.acKw.toFixed(2)} kWp AC
-                </p>
-              </div>
-
-              <div
-                className="absolute left-1/2 top-[52%] grid w-[min(760px,76vw)] -translate-x-1/2 -translate-y-1/2 grid-cols-8 gap-2"
-                style={{
-                  transform:
-                    viewMode === "3d"
-                      ? "translate(-50%, -50%) perspective(1050px) rotateX(58deg) rotateZ(-16deg)"
-                      : "translate(-50%, -50%)",
-                  transformOrigin: "center",
-                }}
-              >
-                {panels.map((panel) => {
-                  const template = getPanelTemplate(panel.templateId);
-                  const isSelected = selectedPanel?.id === panel.id;
-
-                  return (
-                    <button
-                      key={panel.id}
-                      type="button"
-                      draggable
-                      onClick={() => setSelectedPanelId(panel.id)}
-                      onDragStart={(event) => handlePanelDrag(event, panel.id)}
-                      onDragOver={(event) => event.preventDefault()}
-                      onDrop={(event) => handlePanelDrop(event, panel.id)}
-                      className={cn(
-                        "group relative h-12 overflow-hidden rounded-[3px] border transition hover:-translate-y-0.5",
-                        isSelected
-                          ? "border-eliot-cyan shadow-[0_0_24px_rgba(107,233,255,0.55)]"
-                          : "border-blue-300/[0.38] shadow-[0_0_16px_rgba(33,167,255,0.18)]",
-                      )}
-                      style={{
-                        backgroundColor: "#09215e",
-                        backgroundImage:
-                          "linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(135deg, rgba(33,167,255,0.34), rgba(3,12,38,0.1))",
-                        backgroundSize: "18px 100%, 100% 12px, 100% 100%",
-                      }}
-                      title={`${template.name} | ${panel.watts}W`}
-                    >
-                      <span className="absolute inset-x-2 top-1 h-px bg-white/[0.26]" />
-                      <span className="sr-only">
-                        Configurar panel {panel.id}
-                      </span>
-                    </button>
-                  );
-                })}
+                <div className="mt-4 grid grid-cols-3 gap-2">
+                  <InverterStat label="AC" value={`${estimate.acKw.toFixed(2)} kW`} />
+                  <InverterStat label="Unid." value={String(estimate.inverterCount)} />
+                  <InverterStat label="Tipo" value={systemType} />
+                </div>
               </div>
 
               {panels.length === 0 && (
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 z-20 flex items-center justify-center">
                   <div className="rounded-lg border border-dashed border-eliot-cyan/[0.45] bg-eliot-cyan/[0.08] p-6 text-center">
                     <Move className="mx-auto h-8 w-8 text-eliot-cyan" />
                     <p className="mt-3 text-sm font-semibold text-white">
@@ -604,65 +655,23 @@ export function EnergySimulator() {
               )}
             </div>
 
-            <div className="grid gap-px bg-white/[0.08] sm:grid-cols-2 xl:grid-cols-5">
-              <Metric
-                icon={LayoutGrid}
-                label="Area requerida"
-                value={`${estimate.totalArea.toFixed(0)} m2`}
-              />
-              <Metric
-                icon={RotateCw}
-                label="Perdidas estimadas"
-                value={`${estimate.avgLosses.toFixed(1)}%`}
-              />
-              <Metric
-                icon={Cpu}
-                label="Inversores"
-                value={String(estimate.inverterCount)}
-              />
-              <Metric
-                icon={Zap}
-                label="Potencia DC"
-                value={`${estimate.dcKw.toFixed(2)} kWp`}
-              />
-              <Metric
-                icon={Boxes}
-                label="Paneles"
-                value={String(panels.length)}
-              />
+            <div className="grid gap-px bg-white/[0.08] sm:grid-cols-2 xl:grid-cols-4">
+              {kpis.map((kpi) => (
+                <KpiTile key={kpi.label} {...kpi} />
+              ))}
             </div>
           </div>
-        </div>
-
-        <div className="mt-4 grid gap-4 lg:grid-cols-4">
-          <SummaryTile
-            label="Ahorro anual estimado"
-            value={formatCurrency(estimate.annualSavings)}
-          />
-          <SummaryTile
-            label="Retorno de inversion"
-            value={`${estimate.roi.toFixed(1)} anos`}
-          />
-          <SummaryTile
-            label="Produccion anual"
-            value={`${estimate.annualProduction.toLocaleString("es-MX", {
-              maximumFractionDigits: 0,
-            })} kWh`}
-          />
-          <SummaryTile
-            label="Cobertura del consumo"
-            value={`${Math.round(estimate.offset * 100)}%`}
-          />
         </div>
 
         <div className="mt-5 flex flex-col gap-3 rounded-lg border border-white/[0.1] bg-white/[0.035] p-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm font-semibold text-white">
-              Sistema recomendado: {selectedTemplateData.name}
+              Resultado preliminar: {formatCurrency(estimate.investment)} de
+              inversion estimada.
             </p>
             <p className="mt-1 text-sm text-white/[0.62]">
-              Inversion estimada: {formatCurrency(estimate.investment)}. Esta
-              simulacion es preliminar y se confirma con visita tecnica.
+              El calculo cambia con cada panel y se confirma con visita tecnica,
+              levantamiento de sitio y recibos reales.
             </p>
           </div>
           <Button asChild className="shrink-0">
@@ -676,37 +685,38 @@ export function EnergySimulator() {
   );
 }
 
-function Metric({
+function KpiTile({
   icon: Icon,
   label,
   value,
+  detail,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string;
+  detail: string;
 }) {
   return (
     <div className="bg-[#07111c] p-4">
       <div className="flex items-center gap-3">
-        <span className="flex h-9 w-9 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan">
+        <span className="flex h-10 w-10 items-center justify-center rounded-md border border-eliot-cyan/[0.22] bg-eliot-cyan/[0.08] text-eliot-cyan">
           <Icon className="h-4 w-4" />
         </span>
-        <div>
+        <div className="min-w-0">
           <p className="text-base font-black text-white">{value}</p>
-          <p className="text-xs text-white/[0.58]">{label}</p>
+          <p className="text-xs font-semibold text-white/[0.68]">{label}</p>
+          <p className="mt-0.5 truncate text-xs text-white/[0.45]">{detail}</p>
         </div>
       </div>
     </div>
   );
 }
 
-function SummaryTile({ label, value }: { label: string; value: string }) {
+function InverterStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-white/[0.1] bg-white/[0.045] p-5">
-      <p className="text-xs uppercase tracking-[0.18em] text-white/[0.52]">
-        {label}
-      </p>
-      <p className="mt-2 text-2xl font-black text-white">{value}</p>
+    <div className="rounded-md border border-white/[0.1] bg-white/[0.04] p-2">
+      <p className="text-[10px] uppercase text-white/[0.46]">{label}</p>
+      <p className="mt-1 truncate text-xs font-black text-white">{value}</p>
     </div>
   );
 }
