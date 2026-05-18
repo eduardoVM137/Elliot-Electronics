@@ -49,6 +49,115 @@ const escapeHtml = (value: string) =>
 
 const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
+const parseRecipients = (value?: string) =>
+  (value || DEFAULT_TO_EMAIL)
+    .split(",")
+    .map((email) => email.trim())
+    .filter(Boolean);
+
+const buildEmailHtml = ({
+  name,
+  email,
+  solution,
+  message,
+}: {
+  name: string;
+  email: string;
+  solution: string;
+  message: string;
+}) => {
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeSolution = escapeHtml(solution);
+  const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
+  const replyUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(
+    `Re: ${solution}`,
+  )}`;
+
+  return `<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nuevo contacto - Elliot Electronics</title>
+  </head>
+  <body style="margin:0;padding:0;background:#f3f6fb;font-family:Arial,Helvetica,sans-serif;color:#111827;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f6fb;padding:28px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border:1px solid #dbe3ef;border-radius:14px;overflow:hidden;">
+            <tr>
+              <td style="background:#07111f;padding:28px 30px;">
+                <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5ee4ff;">Elliot Electronics</div>
+                <h1 style="margin:10px 0 0;font-size:24px;line-height:1.25;color:#ffffff;">Nuevo mensaje desde el formulario</h1>
+                <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#b9c6d6;">Un cliente envio una solicitud desde elliot-electronics.com.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:28px 30px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td style="padding:0 0 14px;">
+                      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#64748b;">Nombre</div>
+                      <div style="margin-top:5px;font-size:17px;font-weight:700;color:#0f172a;">${safeName}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 0 14px;">
+                      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#64748b;">Email</div>
+                      <a href="mailto:${safeEmail}" style="display:inline-block;margin-top:5px;font-size:15px;color:#0369a1;text-decoration:none;">${safeEmail}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 0 22px;">
+                      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#64748b;">Solucion de interes</div>
+                      <div style="display:inline-block;margin-top:8px;padding:7px 11px;border-radius:999px;background:#e0f7ff;color:#075985;font-size:13px;font-weight:700;">${safeSolution}</div>
+                    </td>
+                  </tr>
+                </table>
+
+                <div style="border-top:1px solid #e5eaf2;padding-top:22px;">
+                  <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#64748b;">Mensaje</div>
+                  <div style="margin-top:10px;padding:18px;border-radius:10px;background:#f8fafc;border:1px solid #e5eaf2;font-size:15px;line-height:1.7;color:#1f2937;">${safeMessage}</div>
+                </div>
+
+                <div style="padding-top:24px;">
+                  <a href="${replyUrl}" style="display:inline-block;background:#07111f;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:13px 18px;border-radius:8px;">Responder al cliente</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="background:#f8fafc;border-top:1px solid #e5eaf2;padding:18px 30px;font-size:12px;line-height:1.6;color:#64748b;">
+                Este correo fue generado automaticamente por el formulario de contacto de Elliot Electronics. Puedes responder directamente a este mensaje.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+};
+
+const buildEmailText = ({
+  name,
+  email,
+  solution,
+  message,
+}: {
+  name: string;
+  email: string;
+  solution: string;
+  message: string;
+}) => `Nuevo mensaje desde el formulario de Elliot Electronics
+
+Nombre: ${name}
+Email: ${email}
+Solucion de interes: ${solution}
+
+Mensaje:
+${message}`;
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const cors = corsHeaders(request, env);
@@ -83,7 +192,7 @@ export default {
     }
 
     const fromEmail = env.FROM_EMAIL || DEFAULT_FROM_EMAIL;
-    const toEmail = env.TO_EMAIL || DEFAULT_TO_EMAIL;
+    const toEmails = parseRecipients(env.TO_EMAIL);
 
     if (!env.RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY");
@@ -98,17 +207,11 @@ export default {
       },
       body: JSON.stringify({
         from: `Elliot Electronics <${fromEmail}>`,
-        to: [toEmail],
+        to: toEmails,
         reply_to: email,
         subject: `Nuevo contacto de ${name} - ${solution}`,
-        html: `
-          <h2>Nuevo mensaje de contacto</h2>
-          <p><strong>Nombre:</strong> ${escapeHtml(name)}</p>
-          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-          <p><strong>Solucion de interes:</strong> ${escapeHtml(solution)}</p>
-          <p><strong>Mensaje:</strong></p>
-          <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
-        `,
+        html: buildEmailHtml({ name, email, solution, message }),
+        text: buildEmailText({ name, email, solution, message }),
       }),
     });
 
