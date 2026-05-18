@@ -18,7 +18,7 @@ export function PortfolioSection() {
         <SectionHeader
           eyebrow="Soluciones"
           title="Capacidades para disenar, instalar y sostener tu operacion."
-          body="Integramos analisis, diseno, instalacion, soporte y plataformas de control para que cada inversion tenga retorno, continuidad y calidad tecnica."
+          body="Integramos analisis, diseño, instalacion, soporte y plataformas de control para que cada inversion tenga retorno, continuidad y calidad tecnica."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {orderedSolutions.map((solution) => solution && (

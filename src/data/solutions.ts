@@ -48,7 +48,7 @@ export const solutions: Solution[] = [
     eyebrow: "Ingenieria industrial",
     title: "Ingenieria que transforma industrias",
     summary:
-      "Diagnostico, diseno, integracion y puesta en marcha para operaciones que requieren precision tecnica.",
+      "Diagnostico, diseño, integracion y puesta en marcha para operaciones que requieren precision tecnica.",
     image:
       "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1400&q=80",
     icon: Workflow,
@@ -122,7 +122,7 @@ export const solutions: Solution[] = [
       "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80",
     icon: CircuitBoard,
     proof: [
-      { label: "Diseno", value: "Custom" },
+      { label: "Diseño", value: "Custom" },
       { label: "Pruebas", value: "FAT/SAT" },
       { label: "Soporte", value: "Remoto" },
     ],

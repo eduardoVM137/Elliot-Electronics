@@ -16,7 +16,7 @@ const benefits = [
   },
   {
     title: "Solucion integral llave en mano",
-    body: "Diagnostico, diseno, instalacion, pruebas, documentacion y capacitacion en una misma ruta.",
+    body: "Diagnostico, diseño, instalacion, pruebas, documentacion y capacitacion en una misma ruta.",
     icon: BadgeCheck,
   },
   {

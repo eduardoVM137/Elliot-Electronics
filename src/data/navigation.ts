@@ -3,7 +3,7 @@ export const mainNav = [
   { label: "Nosotros", href: "/nosotros" },
   { label: "Soluciones", href: "/soluciones/ingenieria" },
   { label: "Proyectos", href: "/proyectos" },
-  { label: "Recursos", href: "/nosotros#metodo" },
+  // { label: "Recursos", href: "/nosotros#metodo" },
   { label: "Contacto", href: "/contacto" },
 ];
 
