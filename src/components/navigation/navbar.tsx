@@ -17,6 +17,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
+  const isHome = pathname === "/";
 
   const solutionItems = solutionNav.map((item) => ({
     ...item,
@@ -30,15 +31,24 @@ export function Navbar() {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-50 border-b border-border backdrop-blur-2xl"
-      style={{ background: "var(--nav-bg)" }}
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-2xl transition-colors",
+        isHome
+          ? "on-dark border-white/10 bg-eliot-ink/[0.18] text-white"
+          : "border-border bg-background/[0.82] text-foreground",
+      )}
     >
       <div className="container flex h-20 items-center justify-between">
         <Link href="/" aria-label="Elliot Electronics inicio">
-          <BrandMark />
+          <BrandMark tone={isHome ? "inverse" : "default"} />
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm text-muted-foreground lg:flex">
+        <nav
+          className={cn(
+            "hidden items-center gap-7 text-sm lg:flex",
+            isHome ? "text-white/[0.78]" : "text-muted-foreground",
+          )}
+        >
           {mainNav.map((item) =>
             item.label === "Soluciones" ? (
               <div key={item.href} className="relative">
@@ -46,8 +56,10 @@ export function Navbar() {
                   type="button"
                   onClick={() => setSolutionsOpen((value) => !value)}
                   className={cn(
-                    "inline-flex items-center gap-1 transition-colors hover:text-foreground",
-                    pathname.startsWith("/soluciones") && "text-foreground",
+                    "inline-flex items-center gap-1 transition-colors",
+                    isHome ? "hover:text-white" : "hover:text-foreground",
+                    pathname.startsWith("/soluciones") &&
+                      (isHome ? "text-white" : "text-foreground"),
                   )}
                 >
                   Soluciones <ChevronDown className="h-3.5 w-3.5" />
@@ -87,8 +99,10 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "transition-colors hover:text-foreground",
-                  pathname === item.href && "text-foreground",
+                  "transition-colors",
+                  isHome ? "hover:text-white" : "hover:text-foreground",
+                  pathname === item.href &&
+                    (isHome ? "text-white" : "text-foreground"),
                 )}
               >
                 {item.label}
@@ -98,14 +112,28 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <ThemeToggle />
-          <Button asChild variant="secondary" size="sm">
+          <ThemeToggle
+            className={cn(
+              isHome && "border-white/20 bg-white/[0.12] text-white hover:text-white",
+            )}
+          />
+          <Button
+            asChild
+            variant="secondary"
+            size="sm"
+            className={cn(isHome && "border-white/20 bg-white/[0.14] text-white")}
+          >
             <Link href="/contacto">Hablemos de tu proyecto</Link>
           </Button>
         </div>
 
         <button
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-card lg:hidden"
+          className={cn(
+            "inline-flex h-10 w-10 items-center justify-center rounded-md border lg:hidden",
+            isHome
+              ? "border-white/20 bg-white/10 text-white"
+              : "border-border bg-card",
+          )}
           onClick={() => setOpen((value) => !value)}
           aria-label="Abrir navegacion"
         >
