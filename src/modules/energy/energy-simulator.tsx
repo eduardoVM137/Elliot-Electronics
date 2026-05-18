@@ -188,7 +188,7 @@ export function EnergySimulator() {
       icon: Cpu,
       label: "Ahorro anual",
       value: formatCurrency(estimate.annualSavings),
-      detail: `Retorno ${estimate.roi.toFixed(1)} anos`,
+      detail: `Retorno ${estimate.roi.toFixed(1)} años`,
     },
   ];
 
