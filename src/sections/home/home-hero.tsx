@@ -75,7 +75,7 @@ export function HomeHero() {
             transition={{ duration: 0.7 }}
             className="text-xs font-semibold uppercase tracking-[0.32em] text-eliot-cyan md:text-sm"
           >
-            Eliot Electronics | Operacion, ahorro y control
+ELIOT ELECTRONICS | INGENIERÍA, ENERGÍA Y TECNOLOGÍA
           </motion.p>
 
           <motion.h1
@@ -84,8 +84,7 @@ export function HomeHero() {
             transition={{ duration: 0.8, delay: 0.08 }}
             className="mx-auto mt-6 max-w-5xl text-balance font-display text-4xl font-black leading-[1.03] tracking-normal text-white md:text-6xl xl:text-[5.1rem]"
           >
-            Soluciones para empresas que necesitan avanzar con claridad.
-          </motion.h1>
+      Ingeniería, energía y tecnología para operaciones que no pueden detenerse.          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 22 }}
@@ -93,9 +92,7 @@ export function HomeHero() {
             transition={{ duration: 0.8, delay: 0.16 }}
             className="mx-auto mt-5 max-w-3xl text-pretty text-base leading-7 text-white/[0.84] md:text-lg md:leading-8"
           >
-            Ayudamos a reducir costos, ordenar proyectos y mantener activos
-            criticos funcionando con paneles solares, ingenieria, sistemas,
-            electronica y soporte tecnico.
+     Diseñamos e integramos soluciones en ingeniería, energía solar, electrónica, sistemas e infraestructura técnica para reducir costos, prevenir fallas y mejorar la operación de tu empresa, con consultoría técnica para supervisar proyectos y tomar mejores decisiones.
           </motion.p>
 
           <motion.div

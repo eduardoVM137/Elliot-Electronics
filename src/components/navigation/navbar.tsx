@@ -27,15 +27,16 @@ export function Navbar() {
   useEffect(() => {
     setSolutionsOpen(false);
     setOpen(false);
+    setMobileSolutionsOpen(false);
   }, [pathname]);
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 overflow-hidden border-b backdrop-blur-2xl transition-colors",
+        "fixed inset-x-0 top-0 z-[100] overflow-visible border-b backdrop-blur-2xl transition-colors",
         isHome
-          ? "on-dark border-white/10 bg-eliot-ink/[0.18] text-white"
-          : "border-border bg-background/[0.82] text-foreground",
+          ? "on-dark border-white/10 bg-eliot-ink/[0.72] text-white"
+          : "border-border bg-background/[0.92] text-foreground",
       )}
     >
       {isHome ? (
@@ -44,8 +45,8 @@ export function Navbar() {
         </div>
       ) : null}
 
-      <div className="container flex h-20 items-center justify-between">
-        <Link href="/" aria-label="Elliot Electronics inicio">
+      <div className="container relative flex h-20 items-center justify-between">
+        <Link href="/" aria-label="Eliot Electronics inicio">
           <BrandMark tone={isHome ? "inverse" : "default"} />
         </Link>
 
@@ -61,6 +62,7 @@ export function Navbar() {
                 <button
                   type="button"
                   onClick={() => setSolutionsOpen((value) => !value)}
+                  aria-expanded={solutionsOpen}
                   className={cn(
                     "inline-flex items-center gap-1 transition-colors",
                     isHome ? "hover:text-white" : "hover:text-foreground",
@@ -72,23 +74,26 @@ export function Navbar() {
                 </button>
 
                 {solutionsOpen && (
-                  <div className="absolute left-1/2 top-full z-50 w-[720px] -translate-x-1/2 pt-6">
-                    <div className="grid grid-cols-2 gap-2 rounded-lg border border-border bg-background/95 p-3 shadow-panel backdrop-blur-2xl">
+                  <div className="absolute left-1/2 top-full z-[120] w-[720px] -translate-x-1/2 pt-6">
+                    <div className="grid grid-cols-2 gap-2 rounded-2xl border border-border bg-background/95 p-3 text-foreground shadow-2xl backdrop-blur-2xl">
                       {solutionItems.map(({ detail, href, label }) => (
                         <Link
                           key={href}
                           href={href}
                           onClick={() => setSolutionsOpen(false)}
-                          className="group rounded-md border border-transparent p-4 transition-colors hover:border-primary/20 hover:bg-primary/5"
+                          className="group rounded-xl border border-transparent p-4 transition-colors hover:border-primary/20 hover:bg-primary/5"
                         >
                           <div className="flex items-start gap-3">
                             {detail && (
-                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                                 <detail.icon className="h-5 w-5" />
                               </div>
                             )}
+
                             <div>
-                              <p className="font-semibold text-foreground">{label}</p>
+                              <p className="font-semibold text-foreground">
+                                {label}
+                              </p>
                               <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
                                 {detail?.summary}
                               </p>
@@ -120,9 +125,11 @@ export function Navbar() {
         <div className="hidden items-center gap-3 lg:flex">
           <ThemeToggle
             className={cn(
-              isHome && "border-white/20 bg-white/[0.12] text-white hover:text-white",
+              isHome &&
+                "border-white/20 bg-white/[0.12] text-white hover:text-white",
             )}
           />
+
           <Button
             asChild
             variant="secondary"
@@ -141,17 +148,18 @@ export function Navbar() {
               : "border-border bg-card",
           )}
           onClick={() => setOpen((value) => !value)}
-          aria-label="Abrir navegacion"
+          aria-label="Abrir navegación"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background/95 p-4 backdrop-blur-2xl lg:hidden">
+        <div className="border-t border-border bg-background/95 p-4 text-foreground backdrop-blur-2xl lg:hidden">
           <div className="mb-3">
             <ThemeToggle />
           </div>
+
           <div className="grid gap-2">
             {mainNav.map((item) =>
               item.label === "Soluciones" ? (
@@ -163,6 +171,7 @@ export function Navbar() {
                   >
                     Soluciones <ChevronDown className="h-4 w-4" />
                   </button>
+
                   {mobileSolutionsOpen && (
                     <div className="ml-3 mt-1 grid gap-1 border-l border-border pl-3">
                       {solutionItems.map(({ href, label }) => (
