@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import {
   ArrowRight,
+  ChevronDown,
   Cpu,
   Gauge,
   LayoutGrid,
@@ -107,6 +108,7 @@ export function EnergySimulator() {
   const [panels, setPanels] = useState<SolarPanel[]>(seedPanels);
   const [selectedPanelId, setSelectedPanelId] = useState<number | null>(1);
   const [viewMode, setViewMode] = useState<"2d" | "3d">("3d");
+  const [quickModelsOpen, setQuickModelsOpen] = useState(false);
 
   const selectedPanel =
     panels.find((panel) => panel.id === selectedPanelId) ?? panels[0] ?? null;
@@ -281,17 +283,17 @@ export function EnergySimulator() {
   }
 
   return (
-    <section className="image-surface section-pad bg-eliot-ink text-white">
+    <section className="section-pad bg-background text-foreground dark:bg-eliot-ink dark:text-white">
       <div className="container">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-eliot-cyan">
               Simula tu sistema solar
             </p>
-            <h2 className="mt-3 text-balance text-3xl font-semibold text-white md:text-5xl">
+            <h2 className="mt-3 text-balance text-3xl font-semibold text-foreground dark:text-white md:text-5xl">
               Disena el arreglo y mira el impacto al instante.
             </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/[0.68] md:text-base">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground dark:text-white/[0.68] md:text-base">
               Arrastra paneles al campo, selecciona uno y ajusta su modelo,
               orientacion, inclinacion y perdidas desde el mismo bloque.
             </p>
@@ -303,7 +305,7 @@ export function EnergySimulator() {
         </div>
 
         <div className="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
-          <aside className="rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-4 shadow-panel">
+          <aside className="on-dark rounded-lg border border-white/[0.12] bg-[#07111c]/95 p-4 text-white shadow-panel">
             <div className="border-b border-white/[0.1] pb-4">
               <p className="text-xs font-black uppercase text-white">
                 1. Datos de consumo
@@ -523,8 +525,13 @@ export function EnergySimulator() {
                 </div>
               )}
 
-              <div className="mt-3 rounded-md border border-white/[0.08] bg-white/[0.025] p-3">
-                <div className="flex items-start justify-between gap-3">
+              <div className="mt-3 overflow-hidden rounded-md border border-white/[0.08] bg-white/[0.025]">
+                <button
+                  type="button"
+                  onClick={() => setQuickModelsOpen((isOpen) => !isOpen)}
+                  aria-expanded={quickModelsOpen}
+                  className="flex w-full items-center justify-between gap-3 p-3 text-left transition hover:bg-white/[0.035]"
+                >
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/[0.72]">
                       Modelos rapidos
@@ -533,44 +540,54 @@ export function EnergySimulator() {
                       Opcional: toca un icono o arrastralo al campo.
                     </p>
                   </div>
-                  <span className="rounded-full border border-white/[0.1] px-2 py-1 text-[10px] font-bold uppercase text-white/[0.48]">
-                    Opcional
-                  </span>
-                </div>
-
-                <div className="mt-3 grid grid-cols-3 gap-2">
-                  {panelTemplates.map((template) => (
-                    <button
-                      key={template.id}
-                      type="button"
-                      draggable
-                      onClick={() => selectTemplate(template.id)}
-                      onDragStart={(event) => handleTemplateDrag(event, template.id)}
+                  <span className="flex items-center gap-2">
+                    <span className="rounded-full border border-white/[0.1] px-2 py-1 text-[10px] font-bold uppercase text-white/[0.48]">
+                      Opcional
+                    </span>
+                    <ChevronDown
                       className={cn(
-                        "group rounded-md border p-2 text-center transition active:cursor-grabbing",
-                        activeTemplateId === template.id
-                          ? "border-eliot-cyan/[0.55] bg-eliot-cyan/[0.09]"
-                          : "border-white/[0.1] bg-white/[0.03] hover:border-eliot-cyan/[0.35]",
+                        "h-4 w-4 text-eliot-cyan transition-transform",
+                        quickModelsOpen && "rotate-180",
                       )}
-                      title={template.name}
-                    >
-                      <span className="mx-auto flex h-9 w-12 items-center justify-center rounded border border-blue-300/[0.28] bg-[#09215e] text-eliot-cyan shadow-[0_0_16px_rgba(33,167,255,0.12)]">
-                        <PanelTop className="h-4 w-4" />
-                      </span>
-                      <span className="mt-2 block truncate text-[11px] font-semibold text-white">
-                        {template.name.split(" ")[0]}
-                      </span>
-                      <span className="text-[11px] font-black text-eliot-cyan">
-                        {template.watts}W
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                    />
+                  </span>
+                </button>
+
+                {quickModelsOpen ? (
+                  <div className="grid grid-cols-3 gap-2 border-t border-white/[0.08] p-3">
+                    {panelTemplates.map((template) => (
+                      <button
+                        key={template.id}
+                        type="button"
+                        draggable
+                        onClick={() => selectTemplate(template.id)}
+                        onDragStart={(event) => handleTemplateDrag(event, template.id)}
+                        className={cn(
+                          "group rounded-md border p-2 text-center transition active:cursor-grabbing",
+                          activeTemplateId === template.id
+                            ? "border-eliot-cyan/[0.55] bg-eliot-cyan/[0.09]"
+                            : "border-white/[0.1] bg-white/[0.03] hover:border-eliot-cyan/[0.35]",
+                        )}
+                        title={template.name}
+                      >
+                        <span className="mx-auto flex h-9 w-12 items-center justify-center rounded border border-blue-300/[0.28] bg-[#09215e] text-eliot-cyan shadow-[0_0_16px_rgba(33,167,255,0.12)]">
+                          <PanelTop className="h-4 w-4" />
+                        </span>
+                        <span className="mt-2 block truncate text-[11px] font-semibold text-white">
+                          {template.name.split(" ")[0]}
+                        </span>
+                        <span className="text-[11px] font-black text-eliot-cyan">
+                          {template.watts}W
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
           </aside>
 
-          <div className="overflow-hidden rounded-lg border border-white/[0.12] bg-[#07111c] shadow-panel">
+          <div className="on-dark overflow-hidden rounded-lg border border-white/[0.12] bg-[#07111c] text-white shadow-panel">
             <div className="flex flex-col gap-3 border-b border-white/[0.1] p-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs font-black uppercase text-white">

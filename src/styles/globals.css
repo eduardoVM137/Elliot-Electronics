@@ -148,6 +148,7 @@
 
   .light .hero-surface .text-white,
   .light .image-surface .text-white,
+  .light .on-dark.text-white,
   .light .on-dark .text-white {
     color: white !important;
   }
@@ -169,6 +170,47 @@
   .light .bg-white\/\[0\.05\],
   .light .bg-white\/\[0\.06\] {
     background-color: rgba(255, 255, 255, 0.72) !important;
+  }
+
+  .light .on-dark .border-white\/10,
+  .light .on-dark .border-white\/15,
+  .light .on-dark .border-white\/20,
+  .light .on-dark .border-white\/\[0\.08\],
+  .light .on-dark .border-white\/\[0\.1\],
+  .light .on-dark .border-white\/\[0\.12\] {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .light .on-dark .bg-white\/10 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.025\] {
+    background-color: rgba(255, 255, 255, 0.025) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.03\] {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.035\] {
+    background-color: rgba(255, 255, 255, 0.035) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.04\] {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.045\] {
+    background-color: rgba(255, 255, 255, 0.045) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.05\] {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .light .on-dark .bg-white\/\[0\.06\] {
+    background-color: rgba(255, 255, 255, 0.06) !important;
   }
 
   .light .bg-eliot-night\/80,
