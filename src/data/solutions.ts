@@ -71,7 +71,7 @@ export const solutions: Solution[] = [
     eyebrow: "Energia / paneles",
     title: "Energia solar para operaciones que no pueden detenerse",
     summary:
-      "Disenamos e integramos sistemas fotovoltaicos para industria, comercios, agroindustria, bombeo y PyMEs. Reducimos dependencia de red, estabilizamos costos, documentamos la instalacion y dejamos monitoreo para que la energia trabaje como parte confiable de tu operacion.",
+      "Infraestructura fotovoltaica disenada con criterio de ingenieria para reducir dependencia energetica, proteger la operacion y dar visibilidad al consumo.",
     image:
       "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1400&q=80",
     icon: SunMedium,
