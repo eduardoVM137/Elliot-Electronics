@@ -49,12 +49,6 @@ const escapeHtml = (value: string) =>
 
 const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-const parseRecipients = (value?: string) =>
-  (value || DEFAULT_TO_EMAIL)
-    .split(",")
-    .map((email) => email.trim())
-    .filter(Boolean);
-
 const buildEmailHtml = ({
   name,
   email,
@@ -194,8 +188,7 @@ export default {
     }
 
     const fromEmail = env.FROM_EMAIL || DEFAULT_FROM_EMAIL;
-    const toEmails = parseRecipients(env.TO_EMAIL);
-    const [primaryEmail = DEFAULT_TO_EMAIL, ...bccEmails] = toEmails;
+    const toEmail = env.TO_EMAIL || DEFAULT_TO_EMAIL;
 
     if (!env.RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY");
@@ -210,8 +203,7 @@ export default {
       },
       body: JSON.stringify({
         from: `Elliot Electronics <${fromEmail}>`,
-        to: [primaryEmail],
-        bcc: bccEmails,
+        to: [toEmail],
         reply_to: email,
         subject: `Nuevo contacto de ${name} - ${solution}`,
         html: buildEmailHtml({

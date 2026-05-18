@@ -10,9 +10,7 @@ routes = [
 ]
 
 [vars]
-# Puedes enviar a varios correos separandolos por coma:
-# TO_EMAIL = "contacto@elliot-electronics.com,otro-correo@ejemplo.com"
-TO_EMAIL = "contacto@elliot-electronics.com,eduardovillagomez75@gmail.com,elliot.duran3101@gmail.com"
+TO_EMAIL = "contacto@elliot-electronics.com"
 FROM_EMAIL = "contacto@elliot-electronics.com"
 ALLOWED_ORIGIN = "https://elliot-electronics.com"
 

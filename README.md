@@ -77,7 +77,7 @@ El Worker usa Resend y envia los mensajes a `contacto@elliot-electronics.com`, c
 Variables del Worker:
 
 ```bash
-TO_EMAIL=contacto@elliot-electronics.com,otro-correo@ejemplo.com
+TO_EMAIL=contacto@elliot-electronics.com
 FROM_EMAIL=contacto@elliot-electronics.com
 ALLOWED_ORIGIN=https://elliot-electronics.com
 ```
