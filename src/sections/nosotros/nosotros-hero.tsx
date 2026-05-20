@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { HeroBackground } from "@/components/visuals/hero-background";
 import { CapabilitiesCarousel } from "@/modules/nosotros/capabilities-carousel";
 
+const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 const fade = (delay: number) => ({
   initial: { opacity: 0, y: 22 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: 0.8, delay, ease },
 });
 
 export function NosotrosHero() {
@@ -34,7 +36,7 @@ export function NosotrosHero() {
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
             animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.6, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, delay: 0.22, ease }}
             className="mx-auto mt-8 h-1 w-20 origin-center rounded-full bg-eliot-cyan"
           />
 

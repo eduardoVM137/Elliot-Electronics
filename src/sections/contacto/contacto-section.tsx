@@ -8,7 +8,7 @@ import { SectionHeader } from "@/components/visuals/section-header";
 import { HeroBackground } from "@/components/visuals/hero-background";
 import { siteConfig } from "@/lib/site";
 
-const ease = [0.22, 1, 0.36, 1] as const;
+const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const contactItems = [
   { icon: Mail,    value: siteConfig.email },

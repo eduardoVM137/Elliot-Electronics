@@ -38,7 +38,8 @@ const values = [
   },
 ];
 
-const ease = [0.22, 1, 0.36, 1] as const;
+const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const easeSpring: [number, number, number, number] = [0.34, 1.56, 0.64, 1];
 
 export function ValoresSection() {
   return (
@@ -73,7 +74,7 @@ export function ValoresSection() {
                 initial={{ scale: 0, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.15 + i * 0.08, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.4, delay: 0.15 + i * 0.08, ease: easeSpring }}
                 className="inline-flex"
               >
                 <value.icon className="h-6 w-6 text-eliot-cyan" />
