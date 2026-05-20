@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import {
   Building2,
+  CheckCircle2,
   Cpu,
   Headphones,
   Lightbulb,
+  Monitor,
   ShieldCheck,
+  Sun,
   Workflow,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader } from "@/components/visuals/section-header";
+import { MetricTile } from "@/components/visuals/metric-tile";
+import { ImagePanel } from "@/components/visuals/image-panel";
 import { FinalCta } from "@/sections/shared/final-cta";
 
 export const metadata: Metadata = {
@@ -64,140 +69,129 @@ const industries = [
   "Mineria",
 ];
 
-const storyFeatures = [
-  {
-    title: "Diagnostico claro",
-    body: "Entendemos primero la operacion, sus riesgos, restricciones y objetivos tecnicos.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Arquitectura viable",
-    body: "Conectamos energia, electronica, software y soporte dentro de una solucion ordenada.",
-    icon: Workflow,
-  },
-  {
-    title: "Implementacion sostenible",
-    body: "Dejamos bases documentadas para operar, mantener y escalar sin improvisaciones.",
-    icon: Cpu,
-  },
+const capabilities = [
+  { label: "Energia solar", sub: "Diseno, instalacion y monitoreo", icon: Sun },
+  { label: "Automatizacion", sub: "Tableros, control y variables", icon: Cpu },
+  { label: "Sistemas", sub: "Dashboards, integracion y datos", icon: Monitor },
+  { label: "Soporte tecnico", sub: "Mesa de ayuda y preventivo 24/7", icon: Headphones },
 ];
 
-const workPath = [
-  "Analizamos la operacion",
-  "Definimos la solucion",
-  "Implementamos con orden",
-  "Acompanamos despues",
+const differentiators = [
+  "Diagnostico gratuito antes de cualquier propuesta comercial",
+  "Propuestas con alcance, costos y cronograma sin letra pequena",
+  "Documentacion tecnica entregada al finalizar cada proyecto",
+  "Soporte post-implementacion incluido como parte del servicio",
+  "Un solo interlocutor tecnico para energia, sistemas y soporte",
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <section className="relative overflow-hidden pt-36 pb-20">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute left-[-180px] top-10 h-[420px] w-[420px] rounded-full border border-eliot-cyan/10" />
-          <div className="absolute left-[-220px] top-4 h-[520px] w-[520px] rounded-full border border-eliot-cyan/10" />
-          <div className="absolute right-10 top-10 h-40 w-40 bg-[radial-gradient(circle,_rgba(56,189,248,0.28)_1px,_transparent_1px)] [background-size:14px_14px]" />
+      {/* Hero */}
+      <section className="relative overflow-hidden pt-36 pb-28">
+        {/* Background layers */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-100 to-white dark:from-eliot-night/80 dark:to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center overflow-hidden">
+          <div className="h-[560px] w-[900px] bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,rgba(33,167,255,0.13),transparent)] dark:bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,rgba(33,167,255,0.07),transparent)]" />
         </div>
+        {/* Top + bottom borders */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-eliot-cyan/55 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-eliot-line" />
 
-        <div className="container">
+        <div className="container relative">
           <div className="mx-auto max-w-5xl text-center">
-            <div className="inline-flex items-center rounded-full border border-eliot-cyan/25 bg-white px-4 py-2 text-sm font-semibold text-eliot-blue shadow-sm">
+            <div className="inline-flex items-center rounded-full border border-eliot-cyan/30 bg-white px-4 py-2 text-sm font-semibold text-eliot-blue shadow-sm dark:border-eliot-cyan/20 dark:bg-eliot-deep dark:text-eliot-cyan">
               Nosotros
             </div>
 
-            <h1 className="mx-auto mt-8 max-w-4xl text-balance text-4xl font-semibold leading-tight tracking-tight text-slate-950 md:text-6xl">
+            <h1 className="mx-auto mt-8 max-w-4xl text-balance text-4xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white md:text-6xl">
               Ingenieria clara para operaciones que no pueden detenerse.
             </h1>
 
             <div className="mx-auto mt-7 h-1 w-16 rounded-full bg-eliot-cyan" />
 
-            <p className="mx-auto mt-7 max-w-3xl text-pretty text-lg leading-8 text-slate-600 md:text-xl">
-              Elliot Electronics integra energia, electronica, sistemas, consultoria y soporte
-              tecnico para empresas que necesitan soluciones bien documentadas, implementables y
-              sostenibles en operacion.
+            <p className="mx-auto mt-7 max-w-3xl text-pretty text-lg leading-8 text-slate-500 dark:text-muted-foreground md:text-xl">
+              Combinamos energia, electronica, sistemas, consultoria y soporte
+              tecnico para empresas que necesitan soluciones intregadas, sostenibles y
+              listas para operar.
             </p>
           </div>
-        </div>
-      </section>
 
-      <section className="pb-24">
-        <div className="container">
-          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-10 shadow-xl shadow-slate-200/60 md:px-10 md:py-14 lg:px-16">
-            <div className="pointer-events-none absolute right-0 top-0 h-56 w-56 rounded-full bg-eliot-cyan/10 blur-3xl" />
-            <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-eliot-blue/5 blur-3xl" />
-
-            <div className="relative mx-auto max-w-3xl text-center">
-              <Badge variant="muted">Nuestra historia</Badge>
-
-              <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
-                Integramos disciplinas para resolver problemas completos.
-              </h2>
-
-              <p className="mt-6 text-lg leading-8 text-slate-600">
-                Elliot Electronics trabaja sobre una necesidad concreta: muchas operaciones requieren
-                energia, hardware, software, electronica y soporte funcionando bajo una misma logica
-                tecnica.
-              </p>
-            </div>
-
-            <div className="relative mx-auto mt-12 max-w-4xl space-y-6 text-base leading-8 text-slate-600 md:text-lg">
-              <p>
-                Nuestro papel es conectar esas piezas con orden, criterio y documentacion. No
-                buscamos proponer tecnologia aislada, sino soluciones que puedan implementarse,
-                mantenerse y crecer dentro de la realidad operativa de cada empresa.
-              </p>
-
-              <p>
-                Nos involucramos desde el diagnostico hasta la puesta en marcha: revisamos el
-                contexto, proponemos una arquitectura viable, cuidamos la implementacion y dejamos
-                bases para que el sistema pueda mantenerse sin depender de improvisaciones.
-              </p>
-
-              <p>
-                Nuestro criterio es practico: cada decision debe poder explicarse, probarse y
-                sostenerse en el tiempo. La tecnologia solo tiene valor cuando mejora la operacion,
-                reduce incertidumbre y puede mantenerse con claridad.
-              </p>
-            </div>
-
-            <div className="relative mt-12 grid gap-4 md:grid-cols-3">
-              {storyFeatures.map((feature) => (
-                <div
-                  key={feature.title}
-                  className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-eliot-blue shadow-sm">
-                    <feature.icon className="h-6 w-6" />
-                  </div>
-
-                  <h3 className="mt-5 text-lg font-semibold text-slate-950">{feature.title}</h3>
-
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{feature.body}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="relative mt-12 rounded-2xl border border-eliot-cyan/20 bg-eliot-blue px-6 py-7 text-white md:px-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-eliot-cyan">
-                Nuestra forma de trabajar
-              </p>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-4">
-                {workPath.map((step, index) => (
-                  <div key={step} className="flex gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-semibold text-eliot-blue">
-                      {index + 1}
-                    </div>
-
-                    <p className="pt-1 text-sm font-medium leading-6 text-white/85">{step}</p>
-                  </div>
-                ))}
+          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
+            {capabilities.map((cap) => (
+              <div
+                key={cap.label}
+                className="rounded-xl border border-slate-200 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md dark:border-eliot-line dark:bg-white/[0.04]"
+              >
+                <cap.icon className="h-5 w-5 text-eliot-cyan" />
+                <p className="mt-3 text-sm font-semibold text-slate-800 dark:text-white">
+                  {cap.label}
+                </p>
+                <p className="mt-1 text-xs leading-4 text-slate-500 dark:text-muted-foreground">
+                  {cap.sub}
+                </p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Nuestra historia */}
+      <section className="pb-24">
+        <div className="container">
+          <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+
+            {/* Left: Narrative */}
+            <div>
+              <Badge variant="muted">Nuestra historia</Badge>
+              <h3 className="mt-4 text-balance text-4xl font-semibold text-white md:text-3xl">
+            Menos proveedores, Más integración.
+              </h3>
+              <div className="mt-5 space-y-4 text-base leading-7 text-muted-foreground">
+   
+                <p>
+                  Nos involucramos desde el diagnostico hasta la puesta en marcha: revisamos
+                  el contexto, proponemos una arquitectura viable, cuidamos la implementacion
+                  y dejamos bases para que el sistema pueda mantenerse sin depender de
+                  improvisaciones.
+                </p>
+                <p>
+                  Nuestro criterio es practico: cada decision debe poder explicarse, probarse
+                  y sostenerse en el tiempo. La tecnologia solo tiene valor cuando mejora la
+                  operacion, reduce incertidumbre y puede mantenerse con claridad.
+                </p>
+              </div>
+
+              <ul className="mt-8 space-y-3">
+                {differentiators.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-eliot-cyan" />
+                    <span className="text-sm leading-6 text-muted-foreground">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Right: Image + key metrics */}
+            <div className="flex flex-col gap-4 lg:pt-2">
+              <ImagePanel
+                image="https://images.unsplash.com/photo-1719848576338-9516ba7ccd8b?auto=format&fit=crop&w=1200&q=80"
+                kicker="Energia solar e ingenieria"
+                title="Proyectos con estándares de calidad"
+                aspect="tall"
+                className="brightness-90 saturate-75"
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <MetricTile value="100%" label="Clientes contentos" />
+                <MetricTile value="$0" label="Costos ocultos en propuestas comerciales" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
       <section id="valores" className="pb-24">
         <div className="container">
           <SectionHeader
@@ -218,6 +212,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Industries */}
       <section className="pb-24">
         <div className="container">
           <SectionHeader

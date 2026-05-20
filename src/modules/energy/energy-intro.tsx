@@ -114,23 +114,7 @@ export function EnergyIntro() {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-2 lg:max-w-sm lg:justify-end">
-                {processSteps.map((step, index) => (
-                  <span
-                    key={step}
-                    className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground"
-                  >
-                    <span className="text-eliot-electric">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    {step}
-                  </span>
-                ))}
-                <span className="inline-flex items-center gap-2 rounded-full border border-eliot-electric/30 bg-eliot-electric/10 px-3 py-2 text-xs font-semibold text-eliot-electric">
-                  <Wrench className="h-3.5 w-3.5" />
-                  Soporte post-instalacion
-                </span>
-              </div>
+          
             </div>
           </div>
         </div>
