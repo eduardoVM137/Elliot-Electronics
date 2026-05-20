@@ -50,6 +50,10 @@ export const metadata: Metadata = {
   publisher: siteConfig.name,
   applicationName: siteConfig.name,
 
+  verification: {
+    google: "6c3ccb9e573e3648",
+  },
+
   robots: {
     index: true,
     follow: true,
