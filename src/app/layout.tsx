@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
 
   verification: {
-    google: "6c3ccb9e573e3648",
+    google: "A8LaaRmGnEV0vVPdp4KshSL27q7fUwN4nGoOf090pec",
   },
 
   robots: {
