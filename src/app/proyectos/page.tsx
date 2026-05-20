@@ -7,7 +7,16 @@ import { FinalCta } from "@/sections/shared/final-cta";
 import { ProyectosHero } from "@/sections/proyectos/proyectos-hero";
 
 export const metadata: Metadata = {
-  title: "Proyectos",
+  title: "Proyectos de Ingeniería Industrial",
+  description:
+    "Casos de éxito en paneles solares, automatización industrial, tableros eléctricos y sistemas SCADA. Proyectos ejecutados por Elliot Electronics en Nuevo Laredo, Tamaulipas y todo México.",
+  alternates: { canonical: "/proyectos" },
+  openGraph: {
+    title: "Proyectos de Ingeniería Industrial | Elliot Electronics",
+    description:
+      "Casos de éxito en paneles solares, automatización, tableros eléctricos y SCADA ejecutados en México.",
+    url: "/proyectos",
+  },
 };
 
 export default function ProjectsPage() {

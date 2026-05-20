@@ -9,7 +9,24 @@ import { SolutionFeatureGrid } from "@/sections/shared/solution-feature-grid";
 import { SolutionHero } from "@/sections/shared/solution-hero";
 
 export const metadata: Metadata = {
-  title: "Consultoria estrategica",
+  title: "Consultoría Técnica Industrial",
+  description:
+    "Consultoría técnica industrial en Nuevo Laredo y México. Diagnóstico de energía, automatización y sistemas. Roadmap de inversión con escenarios de ROI y riesgo medibles. Elliot Electronics.",
+  keywords: [
+    "consultoría técnica industrial",
+    "consultoría ingeniería Nuevo Laredo",
+    "diagnóstico industrial México",
+    "asesoría técnica industrial",
+    "roadmap inversión industrial",
+    "consultoria Elliot Electronics",
+  ],
+  alternates: { canonical: "/soluciones/consultoria" },
+  openGraph: {
+    title: "Consultoría Técnica Industrial | Elliot Electronics",
+    description:
+      "Diagnóstico de energía, automatización y sistemas en Nuevo Laredo. Roadmap con ROI medible para tu operación.",
+    url: "/soluciones/consultoria",
+  },
 };
 
 export default function ConsultingPage() {

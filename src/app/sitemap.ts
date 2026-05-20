@@ -18,6 +18,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${route}`,
     lastModified: now,
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : route.startsWith("/soluciones") ? 0.8 : 0.6,
+    priority:
+      route === "" ? 1 :
+      route === "/soluciones/energia" ? 0.95 :
+      route === "/soluciones/ingenieria" ? 0.9 :
+      route.startsWith("/soluciones") ? 0.85 :
+      route === "/contacto" ? 0.8 :
+      route === "/proyectos" ? 0.75 :
+      route === "/nosotros" ? 0.7 :
+      0.6,
   }));
 }

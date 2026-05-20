@@ -9,7 +9,25 @@ import { SolutionFeatureGrid } from "@/sections/shared/solution-feature-grid";
 import { SolutionHero } from "@/sections/shared/solution-hero";
 
 export const metadata: Metadata = {
-  title: "Sistemas",
+  title: "Sistemas SCADA y Dashboards Industriales",
+  description:
+    "Plataformas SCADA, dashboards industriales y monitoreo en tiempo real para operaciones en México. Visualización de variables, alertas automáticas y control centralizado. Elliot Electronics.",
+  keywords: [
+    "sistemas SCADA México",
+    "dashboards industriales",
+    "monitoreo industrial tiempo real",
+    "SCADA Nuevo Laredo",
+    "control industrial digital",
+    "sistemas de control Tamaulipas",
+    "sistemas Elliot Electronics",
+  ],
+  alternates: { canonical: "/soluciones/sistemas" },
+  openGraph: {
+    title: "Sistemas SCADA y Dashboards Industriales | Elliot Electronics",
+    description:
+      "Plataformas SCADA y dashboards industriales con monitoreo en tiempo real. Control centralizado para operaciones en México.",
+    url: "/soluciones/sistemas",
+  },
 };
 
 export default function SystemsPage() {

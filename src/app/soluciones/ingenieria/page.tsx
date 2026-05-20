@@ -12,7 +12,25 @@ import { SolutionFeatureGrid } from "@/sections/shared/solution-feature-grid";
 import { SolutionHero } from "@/sections/shared/solution-hero";
 
 export const metadata: Metadata = {
-  title: "Ingenieria industrial",
+  title: "Automatización e Ingeniería Industrial en Nuevo Laredo",
+  description:
+    "Automatización industrial, tableros de control eléctrico e ingeniería especializada en Nuevo Laredo, Tamaulipas. Proyectos llave en mano con documentación y soporte técnico. Elliot Electronics.",
+  keywords: [
+    "automatización industrial Nuevo Laredo",
+    "ingeniería industrial Tamaulipas",
+    "tableros de control eléctrico",
+    "automatización industrial México",
+    "ingeniería eléctrica Nuevo Laredo",
+    "control industrial",
+    "ingenieria Elliot Electronics",
+  ],
+  alternates: { canonical: "/soluciones/ingenieria" },
+  openGraph: {
+    title: "Automatización e Ingeniería Industrial | Elliot Electronics",
+    description:
+      "Automatización industrial y tableros de control en Nuevo Laredo, Tamaulipas. Proyectos llave en mano con documentación y soporte.",
+    url: "/soluciones/ingenieria",
+  },
 };
 
 export default function EngineeringPage() {

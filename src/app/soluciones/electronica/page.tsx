@@ -9,7 +9,24 @@ import { SolutionFeatureGrid } from "@/sections/shared/solution-feature-grid";
 import { SolutionHero } from "@/sections/shared/solution-hero";
 
 export const metadata: Metadata = {
-  title: "Electronica industrial",
+  title: "Tableros Eléctricos y Electrónica Industrial",
+  description:
+    "Fabricación e integración de tableros eléctricos industriales en Nuevo Laredo. Protección, control y documentación técnica certificada. Probados en sitio con FAT/SAT. Elliot Electronics.",
+  keywords: [
+    "tableros eléctricos industriales",
+    "electrónica industrial Nuevo Laredo",
+    "fabricación tableros de control",
+    "tableros eléctricos Tamaulipas",
+    "gabinetes eléctricos industriales",
+    "electronica Elliot Electronics",
+  ],
+  alternates: { canonical: "/soluciones/electronica" },
+  openGraph: {
+    title: "Tableros Eléctricos y Electrónica Industrial | Elliot Electronics",
+    description:
+      "Fabricación de tableros eléctricos industriales en Nuevo Laredo. Certificados, probados en sitio con soporte remoto.",
+    url: "/soluciones/electronica",
+  },
 };
 
 export default function ElectronicsPage() {

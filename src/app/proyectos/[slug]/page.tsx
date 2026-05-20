@@ -20,8 +20,19 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProjectBySlug(slug);
 
+  if (!project) return { title: "Proyecto" };
+
+  const description = `${project.summary} ${project.impact} Proyecto de ${project.solution} ejecutado en ${project.location} por Elliot Electronics.`;
+
   return {
-    title: project?.title ?? "Proyecto",
+    title: project.title,
+    description,
+    alternates: { canonical: `/proyectos/${slug}` },
+    openGraph: {
+      title: `${project.title} | Elliot Electronics`,
+      description: `${project.summary} ${project.impact}`,
+      url: `/proyectos/${slug}`,
+    },
   };
 }
 
