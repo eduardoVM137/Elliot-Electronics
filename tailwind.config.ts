@@ -49,7 +49,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        elLiot: {
+        eliot: {
           ink: "#050a11",
           night: "#07111c",
           deep: "#0a1c2e",

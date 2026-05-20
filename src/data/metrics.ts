@@ -1,21 +1,21 @@
 export const companyMetrics = [
-  { value: "+250", label: "Proyectos de ingenieria" },
-  { value: "+12", label: "Anios de experiencia" },
-  { value: "98%", label: "Clientes satisfechos" },
-  { value: "24/7", label: "Soporte y monitoreo" },
-  { value: "+15", label: "Industrias atendidas" },
+  { value: "Ingenieria", label: "Soluciones tecnicas para operacion empresarial" },
+  { value: "Integracion", label: "Energia, electronica, sistemas y soporte conectados" },
+  { value: "Continuidad", label: "Diseno pensado para mantenimiento y crecimiento" },
+  { value: "Soporte", label: "Acompanamiento tecnico posterior a la entrega" },
+  { value: "Sectores", label: "Adaptacion a distintos entornos de trabajo" },
 ];
 
 export const approachSteps = [
   {
     id: "01",
     title: "Diagnostico",
-    body: "Revisamos consumo, objetivos, sitio y necesidades tecnicas.",
+    body: "Revisamos operacion, objetivos, sitio y necesidades tecnicas.",
   },
   {
     id: "02",
     title: "Propuesta",
-    body: "Entregamos alcance, ahorro estimado, inversion y plan de trabajo.",
+    body: "Entregamos alcance, criterios tecnicos y plan de trabajo.",
   },
   {
     id: "03",
@@ -25,6 +25,6 @@ export const approachSteps = [
   {
     id: "04",
     title: "Monitoreo",
-    body: "Damos seguimiento, mantenimiento y soporte para proteger el retorno.",
+    body: "Damos seguimiento, mantenimiento y soporte para sostener la operacion.",
   },
 ];
