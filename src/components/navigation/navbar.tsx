@@ -42,7 +42,7 @@ export function Navbar() {
       </div>
 
       <div className="container relative flex h-20 items-center justify-between">
-        <Link href="/" aria-label="Eliot Electronics inicio">
+        <Link href="/" aria-label="Elliot Electronics inicio">
           <BrandMark />
         </Link>
 

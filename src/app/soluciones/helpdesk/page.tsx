@@ -17,6 +17,8 @@ export const metadata: Metadata = {
     "mesa de ayuda técnica",
     "mantenimiento preventivo industrial",
     "soporte técnico Tamaulipas",
+    "Elliot Electronics",
+    "elliot electronics",
     "helpdesk Elliot Electronics",
   ],
   alternates: { canonical: "/soluciones/helpdesk" },

@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     "fabricación tableros de control",
     "tableros eléctricos Tamaulipas",
     "gabinetes eléctricos industriales",
+    "Elliot Electronics",
+    "elliot electronics",
     "electronica Elliot Electronics",
   ],
   alternates: { canonical: "/soluciones/electronica" },

@@ -68,10 +68,10 @@ export const solutions: Solution[] = [
     slug: "energia",
     index: "03",
     href: "/soluciones/energia",
-    eyebrow: "Energia / paneles",
-    title: "Energia solar para operaciones que no pueden detenerse",
+    eyebrow: "Paneles Solares",
+    title: "Paneles Solares Industriales en Nuevo Laredo, Tamaulipas",
     summary:
-      "Infraestructura fotovoltaica disenada con criterio de ingenieria para reducir dependencia energetica, proteger la operacion y dar visibilidad al consumo.",
+      "Instalacion de paneles solares en Nuevo Laredo, Tamaulipas y noreste de Mexico. Sistemas fotovoltaicos disenados con criterio de ingenieria para reducir dependencia energetica, proteger la operacion y dar visibilidad al consumo.",
     image:
       "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1400&q=80",
     icon: SunMedium,

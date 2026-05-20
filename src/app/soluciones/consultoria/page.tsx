@@ -18,6 +18,8 @@ export const metadata: Metadata = {
     "diagnóstico industrial México",
     "asesoría técnica industrial",
     "roadmap inversión industrial",
+    "Elliot Electronics",
+    "elliot electronics",
     "consultoria Elliot Electronics",
   ],
   alternates: { canonical: "/soluciones/consultoria" },

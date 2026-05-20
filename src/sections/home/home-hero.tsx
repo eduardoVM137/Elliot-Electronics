@@ -78,7 +78,7 @@ export function HomeHero() {
             transition={{ duration: 0.7 }}
             className="text-xs font-semibold uppercase tracking-[0.32em] text-eliot-cyan md:text-sm"
           >
-ELIOT ELECTRONICS | INGENIERÍA, ENERGÍA Y TECNOLOGÍA
+ELLIOT ELECTRONICS | INGENIERÍA, ENERGÍA Y TECNOLOGÍA
           </motion.p>
 
 <motion.h1
@@ -96,9 +96,9 @@ ELIOT ELECTRONICS | INGENIERÍA, ENERGÍA Y TECNOLOGÍA
             transition={{ duration: 0.8, delay: 0.16 }}
             className="mx-auto mt-5 max-w-3xl text-pretty text-base leading-7 text-white/[0.84] md:text-lg md:leading-8"
           >
-            Ayudamos a reducir costos, ordenar proyectos y mantener activos
-            criticos funcionando con paneles solares, ingenieria, sistemas,
-            electronica y soporte tecnico.
+            Elliot Electronics — empresa de ingeniería en Nuevo Laredo, Tamaulipas.
+            Instalamos paneles solares industriales, automatizamos operaciones y
+            mantenemos activos críticos con sistemas, electrónica y soporte técnico 24/7.
           </motion.p>
 
           <motion.div

@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   keywords: [
     "Elliot Electronics",
     "elliot electronics",
+    "elliot-electronics",
+    "elliot electronics nuevo laredo",
+    "elliot electronics tamaulipas",
+    "paneles solares",
     "paneles solares Nuevo Laredo",
     "paneles solares Tamaulipas",
     "instalación paneles solares industrial",
@@ -88,7 +92,7 @@ const jsonLd = {
       "@type": ["Organization", "LocalBusiness"],
       "@id": `${siteUrl}/#organization`,
       name: "Elliot Electronics",
-      alternateName: "elliot-electronics",
+      alternateName: ["elliot-electronics", "elliot electronics", "Elliot Electronics Nuevo Laredo"],
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
@@ -122,7 +126,8 @@ const jsonLd = {
         "@type": "OfferCatalog",
         name: "Soluciones de Ingeniería",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Instalación de paneles solares industriales" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Paneles solares industriales Nuevo Laredo" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Instalación de paneles solares en Tamaulipas" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Automatización y tableros de control" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Sistemas SCADA y dashboards industriales" } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Electrónica industrial y fabricación de tableros" } },

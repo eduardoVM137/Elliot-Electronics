@@ -85,7 +85,7 @@ export function EnergyIntro() {
                 Ingenieria, instalacion y soporte en una misma ruta.
               </h3>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                Eliot Electronics revisa consumo, demanda y sitio; define el
+                Elliot Electronics revisa consumo, demanda y sitio; define el
                 sistema interconectado, hibrido o aislado; documenta la
                 instalacion y deja seguimiento tecnico para operar con claridad.
               </p>

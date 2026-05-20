@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     "automatización industrial México",
     "ingeniería eléctrica Nuevo Laredo",
     "control industrial",
+    "Elliot Electronics",
+    "elliot electronics",
     "ingenieria Elliot Electronics",
   ],
   alternates: { canonical: "/soluciones/ingenieria" },

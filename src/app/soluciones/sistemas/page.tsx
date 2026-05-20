@@ -19,6 +19,8 @@ export const metadata: Metadata = {
     "SCADA Nuevo Laredo",
     "control industrial digital",
     "sistemas de control Tamaulipas",
+    "Elliot Electronics",
+    "elliot electronics",
     "sistemas Elliot Electronics",
   ],
   alternates: { canonical: "/soluciones/sistemas" },
