@@ -10,7 +10,6 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader } from "@/components/visuals/section-header";
-import { companyMetrics } from "@/data/metrics";
 import { FinalCta } from "@/sections/shared/final-cta";
 
 export const metadata: Metadata = {
@@ -65,26 +64,29 @@ const industries = [
   "Mineria",
 ];
 
-const industrySummary =
-  "Manufactura, infraestructura, retail, logistica, servicios y otros entornos con necesidades tecnicas especificas.";
-
 const storyFeatures = [
   {
-    title: "Soluciones tecnicas confiables",
+    title: "Diagnostico claro",
+    body: "Entendemos primero la operacion, sus riesgos, restricciones y objetivos tecnicos.",
     icon: ShieldCheck,
   },
   {
-    title: "Enfoque en seguridad y continuidad",
-    icon: Building2,
-  },
-  {
-    title: "Documentacion clara y lista para operar",
+    title: "Arquitectura viable",
+    body: "Conectamos energia, electronica, software y soporte dentro de una solucion ordenada.",
     icon: Workflow,
   },
   {
-    title: "Acompanamiento experto y cercano",
-    icon: Headphones,
+    title: "Implementacion sostenible",
+    body: "Dejamos bases documentadas para operar, mantener y escalar sin improvisaciones.",
+    icon: Cpu,
   },
+];
+
+const workPath = [
+  "Analizamos la operacion",
+  "Definimos la solucion",
+  "Implementamos con orden",
+  "Acompanamos despues",
 ];
 
 export default function AboutPage() {
@@ -115,94 +117,81 @@ export default function AboutPage() {
               sostenibles en operacion.
             </p>
           </div>
-
-          <div className="mx-auto mt-16 max-w-6xl rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-xl shadow-slate-200/60 backdrop-blur md:p-8">
-            <div className="mb-8 flex items-center justify-center gap-4">
-              <span className="h-px w-16 bg-slate-200 md:w-24" />
-              <span className="text-center text-sm font-semibold uppercase tracking-[0.18em] text-eliot-blue">
-                Nuestra historia
-              </span>
-              <span className="h-px w-16 bg-slate-200 md:w-24" />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-4">
-              {storyFeatures.map((feature) => (
-                <div
-                  key={feature.title}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-                >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-eliot-cyan/10 text-eliot-blue">
-                    <feature.icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-base font-semibold leading-snug text-slate-950">
-                    {feature.title}
-                  </h3>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
       <section className="pb-24">
         <div className="container">
-          <div className="premium-panel overflow-hidden rounded-lg">
-            <div className="grid gap-0 lg:grid-cols-[1.08fr_0.92fr]">
-              <div className="p-6 md:p-8 lg:p-10">
-                <Badge variant="muted">Nuestra historia</Badge>
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-10 shadow-xl shadow-slate-200/60 md:px-10 md:py-14 lg:px-16">
+            <div className="pointer-events-none absolute right-0 top-0 h-56 w-56 rounded-full bg-eliot-cyan/10 blur-3xl" />
+            <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-eliot-blue/5 blur-3xl" />
 
-                <h2 className="mt-5 text-balance text-3xl font-semibold text-white md:text-4xl">
-                  Integramos disciplinas para resolver problemas completos.
-                </h2>
+            <div className="relative mx-auto max-w-3xl text-center">
+              <Badge variant="muted">Nuestra historia</Badge>
 
-                <p className="mt-5 text-base leading-7 text-muted-foreground">
-                  Elliot Electronics trabaja sobre una necesidad concreta: muchas operaciones
-                  requieren energia, hardware, software, electronica y soporte funcionando bajo una
-                  misma logica tecnica. Nuestro papel es conectar esas piezas con orden, criterio y
-                  documentacion.
-                </p>
+              <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+                Integramos disciplinas para resolver problemas completos.
+              </h2>
 
-                <p className="mt-4 text-base leading-7 text-muted-foreground">
-                  Nos involucramos desde el diagnostico hasta la puesta en marcha: revisamos el
-                  contexto, proponemos una arquitectura viable, cuidamos la implementacion y dejamos
-                  bases para que el sistema pueda mantenerse y crecer sin depender de
-                  improvisaciones.
-                </p>
+              <p className="mt-6 text-lg leading-8 text-slate-600">
+                Elliot Electronics trabaja sobre una necesidad concreta: muchas operaciones requieren
+                energia, hardware, software, electronica y soporte funcionando bajo una misma logica
+                tecnica.
+              </p>
+            </div>
 
-                <p className="mt-4 text-base leading-7 text-muted-foreground">
-                  Nuestro criterio es practico: cada decision debe poder explicarse, probarse y
-                  sostenerse en el tiempo. La tecnologia solo tiene valor cuando mejora la operacion,
-                  reduce incertidumbre y puede mantenerse con claridad.
-                </p>
-              </div>
+            <div className="relative mx-auto mt-12 max-w-4xl space-y-6 text-base leading-8 text-slate-600 md:text-lg">
+              <p>
+                Nuestro papel es conectar esas piezas con orden, criterio y documentacion. No
+                buscamos proponer tecnologia aislada, sino soluciones que puedan implementarse,
+                mantenerse y crecer dentro de la realidad operativa de cada empresa.
+              </p>
 
-              <div className="border-t border-border bg-white/[0.025] p-6 md:p-8 lg:border-l lg:border-t-0 lg:p-10">
-                <p className="text-xs font-medium uppercase tracking-wide text-eliot-cyan">
-                  Capacidades conectadas
-                </p>
+              <p>
+                Nos involucramos desde el diagnostico hasta la puesta en marcha: revisamos el
+                contexto, proponemos una arquitectura viable, cuidamos la implementacion y dejamos
+                bases para que el sistema pueda mantenerse sin depender de improvisaciones.
+              </p>
 
-                <div className="mt-5 divide-y divide-border">
-                  {companyMetrics.slice(0, 4).map((metric) => (
-                    <div
-                      key={metric.label}
-                      className="grid gap-2 py-4 first:pt-0 sm:grid-cols-[9rem_1fr] sm:items-start"
-                    >
-                      <h3 className="text-lg font-semibold leading-tight text-white">
-                        {metric.value}
-                      </h3>
-                      <p className="text-sm leading-6 text-muted-foreground">{metric.label}</p>
+              <p>
+                Nuestro criterio es practico: cada decision debe poder explicarse, probarse y
+                sostenerse en el tiempo. La tecnologia solo tiene valor cuando mejora la operacion,
+                reduce incertidumbre y puede mantenerse con claridad.
+              </p>
+            </div>
+
+            <div className="relative mt-12 grid gap-4 md:grid-cols-3">
+              {storyFeatures.map((feature) => (
+                <div
+                  key={feature.title}
+                  className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-eliot-blue shadow-sm">
+                    <feature.icon className="h-6 w-6" />
+                  </div>
+
+                  <h3 className="mt-5 text-lg font-semibold text-slate-950">{feature.title}</h3>
+
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{feature.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="relative mt-12 rounded-2xl border border-eliot-cyan/20 bg-eliot-blue px-6 py-7 text-white md:px-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-eliot-cyan">
+                Nuestra forma de trabajar
+              </p>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-4">
+                {workPath.map((step, index) => (
+                  <div key={step} className="flex gap-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-semibold text-eliot-blue">
+                      {index + 1}
                     </div>
-                  ))}
-                </div>
 
-                <div className="mt-6 border-t border-eliot-cyan/25 pt-5">
-                  <p className="text-xs font-medium uppercase tracking-wide text-eliot-cyan">
-                    Sectores atendidos
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    {industrySummary}
-                  </p>
-                </div>
+                    <p className="pt-1 text-sm font-medium leading-6 text-white/85">{step}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
